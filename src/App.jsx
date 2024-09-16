@@ -42,6 +42,7 @@ function App() {
             </>
           }
         />
+         <Route path="orders" element={<AllOrders />} />
         {/* Shop Page Route */}
         <Route path="/shop" element={<ShopPage />} />
 
@@ -64,7 +65,7 @@ function App() {
           <Route path ="create-collection-product" element={<CreateCollectionProduct />} />
           <Route path="all-orders" element={<AllOrders />} />
           <Route path="video-upload" element={<VideoUpload />} />
-          <Route path="all-orders" element={<AllOrders />} />
+         
         </Route>
       </Routes>
     </div>

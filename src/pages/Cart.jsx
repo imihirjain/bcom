@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FaShoppingCart } from "react-icons/fa";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
@@ -85,19 +88,24 @@ const Cart = () => {
 
             if (verifyResponse.ok) {
               // Save order details to the backend for admin viewing
-              await fetch("https://bcom-backend.onrender.com//api/orders", {
+              await fetch("https://bcom-backend.onrender.com/api/orders", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ cart, totalPrice, paymentData }),
               });
 
+              // Log payment details and product data
+              console.log("Product details:", cart);
+              console.log("Payment details:", paymentData);
+
               // Clear the cart after successful payment
               setCart([]);
               localStorage.removeItem("cart");
-              alert("Payment Successful!");
-              navigate("/orders"); // Navigate to orders page or dashboard
+
+              toast.success("Payment Successful!", { position: toast.POSITION.TOP_RIGHT });
+              navigate("/"); // Navigate to orders page or dashboard
             } else {
-              alert("Payment verification failed. Please try again.");
+              toast.error("Payment verification failed. Please try again.", { position: toast.POSITION.TOP_RIGHT });
             }
           },
           prefill: {
@@ -116,14 +124,25 @@ const Cart = () => {
         const rzp = new window.Razorpay(options);
         rzp.open();
       } else {
-        alert("Order creation failed. Please try again.");
+        toast.error("Order creation failed. Please try again.", { position: toast.POSITION.TOP_RIGHT });
       }
     } catch (error) {
       console.error("Error during checkout:", error);
+      toast.error("Checkout failed. Please try again.", { position: toast.POSITION.TOP_RIGHT });
     }
   };
 
-  if (cart.length === 0) return <p>Your cart is empty.</p>;
+  if (cart.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <FaShoppingCart className="text-9xl text-gray-400" />
+        <p className="text-2xl text-gray-500 mt-4">Your cart is empty.</p>
+        <Link to ="/">
+        <p className="/">Shop Now</p>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-5 mt-24 font-corm font-semibold">
@@ -178,6 +197,7 @@ const Cart = () => {
           Checkout
         </button>
       </div>
+      <ToastContainer />
     </div>
   );
 };
