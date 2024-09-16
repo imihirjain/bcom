@@ -26,7 +26,7 @@ import CollectionProducts from "./components/CollectionProducts ";
 
 function App() {
   return (
-    <>
+    <div className="overflow-x-hidden">
       <Navbar />
       <Routes>
         {/* Home Page Route */}
@@ -67,7 +67,7 @@ function App() {
           <Route path="all-orders" element={<AllOrders />} />
         </Route>
       </Routes>
-    </>
+    </div>
   );
 }
 
