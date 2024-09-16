@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { FaShoppingCart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
@@ -56,17 +53,14 @@ const Cart = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: totalPrice, currency: "INR", cart }),
       });
-
+  
       const order = await response.json();
-
+  
       if (order && order.id) {
         const options = {
-          key: process.env.RAZORPAY_KEY_ID, // Replace with your Razorpay Key ID
+          key: process.env.RAZORPAY_KEY_ID,
           amount: order.amount, // Amount in paise
           currency: order.currency,
-          name: "Your Company Name",
-          description: "Test Transaction",
-          image: "https://your-logo-url.com", // Replace with your logo
           order_id: order.id, // Razorpay order ID from the backend
           handler: async function (response) {
             const paymentData = {
@@ -74,7 +68,7 @@ const Cart = () => {
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
             };
-
+  
             const verifyResponse = await fetch(
               "https://bcom-backend.onrender.com/api/payments/verify",
               {
@@ -83,29 +77,27 @@ const Cart = () => {
                 body: JSON.stringify(paymentData),
               }
             );
-
-            const verificationResult = await verifyResponse.json();
-
+  
             if (verifyResponse.ok) {
-              // Save order details to the backend for admin viewing
+              // After payment verification, send the cart and payment data to the backend to create the order
               await fetch("https://bcom-backend.onrender.com/api/orders", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ cart, totalPrice, paymentData }),
+                body: JSON.stringify({
+                  cart: cart, 
+                  totalPrice: totalPrice, 
+                  paymentData: paymentData
+                }),
               });
-
-              // Log payment details and product data
-              console.log("Product details:", cart);
-              console.log("Payment details:", paymentData);
-
-              // Clear the cart after successful payment
+              
+  
+              // Clear the cart after successful order placement
               setCart([]);
               localStorage.removeItem("cart");
-
-              toast.success("Payment Successful!", { position: toast.POSITION.TOP_RIGHT });
-              navigate("/"); // Navigate to orders page or dashboard
+              alert("Payment Successful!");
+              navigate("/orders");
             } else {
-              toast.error("Payment verification failed. Please try again.", { position: toast.POSITION.TOP_RIGHT });
+              alert("Payment verification failed. Please try again.");
             }
           },
           prefill: {
@@ -113,36 +105,23 @@ const Cart = () => {
             email: "customer@example.com",
             contact: "9999999999",
           },
-          notes: {
-            address: "Corporate Office",
-          },
           theme: {
             color: "#F37254",
           },
         };
-
+  
         const rzp = new window.Razorpay(options);
         rzp.open();
       } else {
-        toast.error("Order creation failed. Please try again.", { position: toast.POSITION.TOP_RIGHT });
+        alert("Order creation failed. Please try again.");
       }
     } catch (error) {
       console.error("Error during checkout:", error);
-      toast.error("Checkout failed. Please try again.", { position: toast.POSITION.TOP_RIGHT });
     }
   };
+  
 
-  if (cart.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <FaShoppingCart className="text-9xl text-gray-400" />
-        <p className="text-2xl text-gray-500 mt-4">Your cart is empty.</p>
-        <Link to ="/">
-        <p className="/">Shop Now</p>
-        </Link>
-      </div>
-    );
-  }
+  if (cart.length === 0) return <p>Your cart is empty.</p>;
 
   return (
     <div className="container mx-auto p-5 mt-24 font-corm font-semibold">
@@ -197,7 +176,6 @@ const Cart = () => {
           Checkout
         </button>
       </div>
-      <ToastContainer />
     </div>
   );
 };

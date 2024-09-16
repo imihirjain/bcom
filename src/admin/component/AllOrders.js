@@ -1,42 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-const AllOrders = () => {
+const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    // Fetch all orders from the backend
     const fetchOrders = async () => {
-      try {
-        const response = await fetch("https://bcom-backend.onrender.com/api/orders");
-        const data = await response.json();
-        setOrders(data);
-      } catch (error) {
-        console.error("Failed to fetch orders:", error);
-      }
+      const response = await fetch('https://bcom-backend.onrender.com/api/orders');
+      const data = await response.json();
+      setOrders(data);
     };
 
     fetchOrders();
   }, []);
 
-  if (orders.length === 0) return <p>No orders available.</p>;
-
   return (
-    <div className="container mx-auto p-5 mt-24">
+    <div className="container mx-auto p-5 mt-24 font-semibold">
       <h1 className="text-3xl font-bold mb-4">All Orders</h1>
       <div className="grid gap-5">
         {orders.map((order) => (
-          <div key={order._id} className="p-4 border-b">
-            <h2 className="font-bold mb-2">Order ID: {order._id}</h2>
+          <div key={order._id} className="border p-4">
+            <h2 className="text-xl">Order ID: {order._id}</h2>
             <p>Total Price: ₹{order.totalPrice}</p>
-            <p>Payment Status: {order.paymentStatus || "Pending"}</p>
-            <h3 className="font-semibold">Items:</h3>
-            <ul>
-              {order.cart.map((item) => (
-                <li key={item.id}>
-                  {item.name} - ₹{item.price} x {item.quantity}
-                </li>
+            <p>Status: {order.status}</p>
+            <div>
+              <h3 className="font-semibold">Items:</h3>
+              {order.cartItems.map((item, idx) => (
+                <div key={idx}>
+                  <p>Product: {item.name}</p>
+                  <p>Quantity: {item.quantity}</p>
+                  <p>Price: ₹{item.price}</p>
+                  <p>Size: {item.size}</p>
+                  <p>Collection: {item.collection || 'N/A'}</p>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         ))}
       </div>
@@ -44,4 +41,4 @@ const AllOrders = () => {
   );
 };
 
-export default AllOrders;
+export default AdminOrders;

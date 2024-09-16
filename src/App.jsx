@@ -65,6 +65,7 @@ function App() {
           <Route path ="create-collection-product" element={<CreateCollectionProduct />} />
           <Route path="all-orders" element={<AllOrders />} />
           <Route path="video-upload" element={<VideoUpload />} />
+          <Route path ="orders" element={<AllOrders />} />
          
         </Route>
       </Routes>
