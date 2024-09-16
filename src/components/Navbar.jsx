@@ -113,7 +113,7 @@ const Navbar = () => {
       <div className="relative w-full overflow-x-hidden">
         {/* Only render the Slider on the Home page (path === "/") */}
         {location.pathname === "/" ? (
-          <div className="h-screen">
+          <div className="">
             <Slider />
           </div>
         ) : (

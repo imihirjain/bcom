@@ -18,7 +18,7 @@ const Slider = () => {
       const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
       setCurrentIndex(newIndex);
       setIsTransitioning(false);
-    }, 7000); // Time duration for the effect
+    }, 700); // Time duration for the effect
   };
 
   // Function to go to the next slide
@@ -32,18 +32,17 @@ const Slider = () => {
     }, 700); // Time duration for the effect
   };
 
-  // Automatic sliding effect every 3 seconds
+  // Automatic sliding effect every 4 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
       nextSlide();
     }, 4000); // Slide changes every 4 seconds
 
-    // Clean up the timer when the component is unmounted or when the effect re-runs
     return () => clearTimeout(timer);
   }, [currentIndex]);
 
   return (
-    <div className="w-full h-[100vh] sm:h-[full] md:h-[full] relative overflow-hidden">
+    <div className="w-full max-h-[400px] sm:max-h-[500px] md:max-h-[600px] lg:max-h-[80vh] relative overflow-hidden">
       {/* Slider Container */}
       <div
         className="w-full h-full flex transition-transform duration-700 ease-in-out"
@@ -55,10 +54,9 @@ const Slider = () => {
             <img
               src={slide}
               alt={`Slide ${index}`}
-              className={`w-full h-full object-fill transition-all duration-700 ${
+              className={`w-full h-full object-contain transition-all duration-700 ${
                 isTransitioning ? 'scale-110 blur-sm' : 'scale-100 blur-0'
               }`}
-              // Zoom effect on image change: scale-110 for zoom, blur-sm for foggy effect
             />
           </div>
         ))}
@@ -67,7 +65,7 @@ const Slider = () => {
       {/* Left Arrow */}
       <button
         onClick={prevSlide}
-        className="absolute top-1/2 left-1 transform -translate-y-1/2 p-2 text-white opacity-75 hover:opacity-100"
+        className="absolute top-1/2 left-2 transform -translate-y-1/2 p-2 text-white opacity-75 hover:opacity-100 bg-gray-700 rounded-full"
       >
         &#10094;
       </button>
@@ -75,13 +73,13 @@ const Slider = () => {
       {/* Right Arrow */}
       <button
         onClick={nextSlide}
-        className="absolute top-1/2 right-1 transform -translate-y-1/2 p-2 text-white opacity-75 hover:opacity-100"
+        className="absolute top-1/2 right-2 transform -translate-y-1/2 p-2 text-white opacity-75 hover:opacity-100 bg-gray-700 rounded-full"
       >
         &#10095;
       </button>
 
       {/* Indicators */}
-      <div className="absolute bottom-0 left-0 right-0 flex justify-center p-2 space-x-2">
+      <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
         {slides.map((_, index) => (
           <div
             key={index}

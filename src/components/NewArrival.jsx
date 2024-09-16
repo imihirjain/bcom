@@ -59,7 +59,7 @@ const NewArrival = () => {
   };
 
   return (
-    <div className="w-full flex flex-col items-center justify-center py-10">
+    <div className="w-full flex flex-col items-center justify-center py-10 sm:py-2">
       {/* Text Section */}
       <div className="text-center mb-6 px-4">
         <h2 className="text-[20px] md:text-[25px] mt-[40px] mb-2 font-semibold uppercase font-gara">Divinity Through Design</h2>
