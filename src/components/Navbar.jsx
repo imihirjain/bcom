@@ -335,7 +335,7 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {showMenu && (
           <div
-            className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-start"
+            className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-start z-50"
             ref={menuRef}
           >
             <div className="bg-white w-64 h-full p-5">
