@@ -23,7 +23,7 @@ const CreateCategoryProduct = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('https://e-com-backend-dxii.onrender.com/api/categories');
+      const response = await axios.get('https://bcom-backend.onrender.com/api/categories');
       setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -33,7 +33,7 @@ const CreateCategoryProduct = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('https://e-com-backend-dxii.onrender.com/api/products/products');
+      const response = await axios.get('https://bcom-backend.onrender.com/api/products/products');
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -67,7 +67,7 @@ const CreateCategoryProduct = () => {
     });
   
     try {
-      await axios.post(`https://e-com-backend-dxii.onrender.com/api/products/${category._id}/products`, formData, {
+      await axios.post(`https://bcom-backend.onrender.com/api/products/${category._id}/products`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -108,7 +108,7 @@ const CreateCategoryProduct = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`https://e-com-backend-dxii.onrender.com/api/products/products/${id}`);
+        await axios.delete(`https://bcom-backend.onrender.com/api/products/products/${id}`);
         toast.success('Product deleted successfully!');
         fetchProducts();
       } catch (error) {

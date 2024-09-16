@@ -25,7 +25,7 @@ const Collection = () => {
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/collections');
+        const response = await axios.get('https://bcom-backend.onrender.com/api/collections');
         setCollections(response.data);  // Assuming the API returns an array of collections
       } catch (error) {
         console.error('Error fetching collections:', error);

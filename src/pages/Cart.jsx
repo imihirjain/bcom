@@ -48,7 +48,7 @@ const Cart = () => {
 
   const handleCheckout = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/payments", {
+      const response = await fetch("https://bcom-backend.onrender.com/api/payments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: totalPrice, currency: "INR", cart }),
@@ -73,7 +73,7 @@ const Cart = () => {
             };
 
             const verifyResponse = await fetch(
-              "http://localhost:5000/api/payments/verify",
+              "https://bcom-backend.onrender.com/api/payments/verify",
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -85,7 +85,7 @@ const Cart = () => {
 
             if (verifyResponse.ok) {
               // Save order details to the backend for admin viewing
-              await fetch("http://localhost:5000/api/orders", {
+              await fetch("https://bcom-backend.onrender.com//api/orders", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ cart, totalPrice, paymentData }),

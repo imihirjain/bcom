@@ -15,7 +15,7 @@ const ProductInfo = () => {
     const fetchProduct = async () => {
       try {
         // First, try fetching the product from the category API
-        const productResponse = await fetch(`http://localhost:5000/api/products/${id}/products/${id}`);
+        const productResponse = await fetch(`https://bcom-backend.onrender.com/api/products/${id}/products/${id}`);
         if (productResponse.ok) {
           const productData = await productResponse.json();
           setProduct(productData);
@@ -23,7 +23,7 @@ const ProductInfo = () => {
           setIsCollectionProduct(false); // It's a regular category product
         } else {
           // If the regular product is not found, fetch from the collection product API
-          const collectionProductResponse = await fetch(`http://localhost:5000/api/collection-products/${collectionId}/products/${id}`);
+          const collectionProductResponse = await fetch(`https://bcom-backend.onrender.com/api/collection-products/${collectionId}/products/${id}`);
           if (collectionProductResponse.ok) {
             const collectionProductData = await collectionProductResponse.json();
             setProduct(collectionProductData);
@@ -41,7 +41,7 @@ const ProductInfo = () => {
     // Fetch related collection products from API
     const fetchCollectionProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/collection-products/66e68e0c8fa576c8d8b56d28/products');
+        const response = await fetch('https://bcom-backend.onrender.com/api/collection-products/66e68e0c8fa576c8d8b56d28/products');
         if (response.ok) {
           const productsData = await response.json();
           setCollectionProducts(productsData); // Set collection products

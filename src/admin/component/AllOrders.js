@@ -7,7 +7,7 @@ const AllOrders = () => {
     // Fetch all orders from the backend
     const fetchOrders = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/orders");
+        const response = await fetch("https://bcom-backend.onrender.com/api/orders");
         const data = await response.json();
         setOrders(data);
       } catch (error) {

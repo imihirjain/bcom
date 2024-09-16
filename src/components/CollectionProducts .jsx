@@ -13,7 +13,7 @@ const CollectionProducts = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/collection-products/${id}/products`
+          `https://bcom-backend.onrender.com/api/collection-products/${id}/products`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch products");

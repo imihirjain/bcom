@@ -15,8 +15,8 @@ const NewArrival = () => {
     const fetchCombinedProducts = async () => {
       try {
         const [productsResponse, collectionProductsResponse] = await Promise.all([
-          fetch('http://localhost:5000/api/products/products'),
-          fetch('http://localhost:5000/api/collection-products/products'),
+          fetch('https://bcom-backend.onrender.com/api/products/products'),
+          fetch('https://bcom-backend.onrender.com/api/collection-products/products'),
         ]);
 
         const productsData = await productsResponse.json();

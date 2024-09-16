@@ -16,7 +16,7 @@ const CreateCategory = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('https://e-com-backend-dxii.onrender.com/api/categories');
+      const response = await axios.get('https://bcom-backend.onrender.com/api/categories');
       setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -30,7 +30,7 @@ const CreateCategory = () => {
     if (editMode) {
       // Update category
       try {
-        await axios.put(`https://e-com-backend-dxii.onrender.com/api/categories/${categoryId}`, { name });
+        await axios.put(`https://bcom-backend.onrender.com/api/categories/${categoryId}`, { name });
         toast.success('Category updated successfully!');
         setEditMode(false);
         setCategoryId(null);
@@ -41,7 +41,7 @@ const CreateCategory = () => {
     } else {
       // Create category
       try {
-        await axios.post('https://e-com-backend-dxii.onrender.com/api/categories', { name });
+        await axios.post('https://bcom-backend.onrender.com/api/categories', { name });
         toast.success('Category created successfully!');
       } catch (error) {
         console.error('Error creating category:', error);
@@ -62,7 +62,7 @@ const CreateCategory = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
       try {
-        await axios.delete(`https://e-com-backend-dxii.onrender.com/api/categories/${id}`);
+        await axios.delete(`https://bcom-backend.onrender.com/api/categories/${id}`);
         toast.success('Category deleted successfully!');
         fetchCategories(); // Refresh the list after deleting
       } catch (error) {

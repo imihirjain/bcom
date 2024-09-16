@@ -59,7 +59,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("https://e-com-backend-dxii.onrender.com/api/categories");
+        const response = await fetch("https://bcom-backend.onrender.com/api/categories");
         const data = await response.json();
         setCategories(data);
       } catch (error) {
@@ -69,7 +69,7 @@ const Navbar = () => {
 
     const fetchCollections = async () => {
       try {
-        const response = await fetch("https://e-com-backend-dxii.onrender.com/api/collections");
+        const response = await fetch("https://bcom-backend.onrender.com/api/collections");
         const data = await response.json();
         setCollections(data);
       } catch (error) {

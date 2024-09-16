@@ -19,7 +19,7 @@ const CategoryProducts = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/products/${id}/products`
+          `https://bcom-backend.onrender.com/api/products/${id}/products`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch products");

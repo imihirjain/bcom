@@ -16,7 +16,7 @@ const CreateCollection = () => {
 
   const fetchCollections = async () => {
     try {
-      const response = await axios.get('https://e-com-backend-dxii.onrender.com/api/collections');
+      const response = await axios.get('https://bcom-backend.onrender.com/api/collections');
       setCollections(response.data);
     } catch (error) {
       console.error('Error fetching collections:', error);
@@ -30,7 +30,7 @@ const CreateCollection = () => {
     if (editMode) {
       // Update collection
       try {
-        await axios.put(`https://e-com-backend-dxii.onrender.com/api/collections/${collectionId}`, { name });
+        await axios.put(`https://bcom-backend.onrender.com/api/collections/${collectionId}`, { name });
         toast.success('Collection updated successfully!');
         setEditMode(false);
         setCollectionId(null);
@@ -41,7 +41,7 @@ const CreateCollection = () => {
     } else {
       // Create collection
       try {
-        await axios.post('https://e-com-backend-dxii.onrender.com/api/collections', { name });
+        await axios.post('https://bcom-backend.onrender.com/api/collections', { name });
         toast.success('Collection created successfully!');
       } catch (error) {
         console.error('Error creating collection:', error);
@@ -62,7 +62,7 @@ const CreateCollection = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this collection?')) {
       try {
-        await axios.delete(`https://e-com-backend-dxii.onrender.com/api/collections/${id}`);
+        await axios.delete(`https://bcom-backend.onrender.com/api/collections/${id}`);
         toast.success('Collection deleted successfully!');
         fetchCollections(); // Refresh the list after deleting
       } catch (error) {
