@@ -47,27 +47,43 @@ const Cart = () => {
   };
 
   const handleCheckout = async () => {
+    const currentCart = cart.map((item) => ({
+      productId: item.id,  // Assuming `id` is the productId in the cart state
+      name: item.name,
+      description: item.description,
+      image: item.image,
+      price: item.price,
+      quantity: item.quantity,
+      size: item.size,
+      collection: item.collection,
+    }));
+  
+    console.log("Updated Cart Items for Order:", currentCart); // Log the updated cartItems
+  
     try {
       const response = await fetch("https://bcom-backend.onrender.com/api/payments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: totalPrice, currency: "INR", cart }),
+        body: JSON.stringify({ amount: totalPrice, currency: "INR", cartItems: currentCart }), // Use `cartItems` here
       });
   
       const order = await response.json();
+      console.log("Payment Order Response:", order);
   
       if (order && order.id) {
         const options = {
           key: process.env.RAZORPAY_KEY_ID,
-          amount: order.amount, // Amount in paise
+          amount: order.amount,
           currency: order.currency,
-          order_id: order.id, // Razorpay order ID from the backend
+          order_id: order.id,
           handler: async function (response) {
             const paymentData = {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
             };
+  
+            console.log("Payment Data to Verify:", paymentData);
   
             const verifyResponse = await fetch(
               "https://bcom-backend.onrender.com/api/payments/verify",
@@ -79,19 +95,18 @@ const Cart = () => {
             );
   
             if (verifyResponse.ok) {
-              // After payment verification, send the cart and payment data to the backend to create the order
-              await fetch("https://bcom-backend.onrender.com/api/orders", {
+              console.log("Creating Order with Cart and Payment Data:", currentCart, totalPrice, paymentData);
+              const orderResponse = await fetch("https://bcom-backend.onrender.com/api/orders", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                  cart: cart, 
-                  totalPrice: totalPrice, 
-                  paymentData: paymentData
+                  cartItems: currentCart,
+                  totalPrice: totalPrice,
+                  paymentData: paymentData,
                 }),
               });
-              
+              console.log("Order Creation Response:", await orderResponse.json());
   
-              // Clear the cart after successful order placement
               setCart([]);
               localStorage.removeItem("cart");
               alert("Payment Successful!");
@@ -119,6 +134,9 @@ const Cart = () => {
       console.error("Error during checkout:", error);
     }
   };
+  
+  
+  
   
 
   if (cart.length === 0) return <p>Your cart is empty.</p>;

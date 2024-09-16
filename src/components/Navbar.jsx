@@ -188,7 +188,7 @@ const Navbar = () => {
                   </li>
                   <li className="relative group">
                     <Link
-                      to="/shop"
+                      to=""
                       className="hover:border-b-2 hover:border-black font-corm"
                     >
                       Shop
@@ -294,10 +294,12 @@ const Navbar = () => {
                           </span>
                         )}
                       </Link>
+                      <Link to="/cart">
                       <FontAwesomeIcon
                         icon={faCartArrowDown}
                         className="ml-2 text-xl cursor-pointer"
                       />
+                      </Link>
                     </div>
                   </li>
                 </ul>
@@ -357,7 +359,7 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className="hover:bg-gray-100 px-3 py-2 font-corm">
-                  <Link to="/shop" onClick={toggleMenu}>
+                  <Link to="" onClick={toggleMenu}>
                     Shop
                   </Link>
                   {/* Add Categories under Shop in the Mobile Menu */}
