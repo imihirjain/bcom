@@ -1,46 +1,129 @@
-const express = require('express');
-const router = express.Router();
 const Order = require('../models/Order');
+const Payment = require('../models/Payment');
+const { sendOrderConfirmationEmail } = require('../config/mailer');
 
-// Route for placing an order (common for both user and admin)
-router.post('/orders', async (req, res) => {
+// Create a new order
+exports.createOrder = async (req, res) => {
   try {
-    const { cartItems, totalPrice, paymentData } = req.body;
+    // Log the entire request body to check if it is being received correctly
+    console.log("Request Body:", req.body);
 
+    const { cartItems, totalPrice, paymentData, userDetails } = req.body;
+
+    // Log the userDetails to ensure they're present
+    console.log("User Details:", userDetails);
+
+    // Check for missing user details and return early if any are missing
+    if (!userDetails || !userDetails.name || !userDetails.phone || !userDetails.email || !userDetails.address) {
+      console.log("User details are missing or incomplete:", userDetails);
+      return res.status(400).json({ message: 'User details are missing or incomplete.' });
+    }
+
+    // Create a new order instance and log the details
     const newOrder = new Order({
       cartItems,
       totalPrice,
       paymentData,
+      userDetails,
+      status: 'Pending',
     });
 
+    // Log new order details before saving
+    console.log("New Order Details:", newOrder);
+
+    // Save the order in the database and log the result
     const savedOrder = await newOrder.save();
-    res.status(201).json(savedOrder);
-  } catch (error) {
-    res.status(500).json({ message: 'Error placing order', error });
-  }
-});
+    console.log("Order created successfully:", savedOrder);
 
-// Route for admin to get all orders
-router.get('/orders', async (req, res) => {
-  try {
-    const orders = await Order.find();
-    res.status(200).json(orders);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching orders', error });
-  }
-});
+    // Send order confirmation email and log the attempt
+    console.log("Attempting to send order confirmation email to:", userDetails.email);
+    await sendOrderConfirmationEmail(userDetails.email, savedOrder);
+    console.log("Order confirmation email sent successfully.");
 
-// Route for user to get their order details based on order ID
-router.get('/orders/:id', async (req, res) => {
+    // Return the response with the saved order
+    return res.status(201).json({
+      message: 'Order created successfully',
+      order: savedOrder,
+    });
+
+  } catch (error) {
+    // Catch and log any errors that occur during order creation or email sending
+    console.error("Error creating order or sending email:", error.message);
+    return res.status(500).json({
+      message: 'Error creating order',
+      error: error.message,
+    });
+  }
+};
+
+
+// Update order status based on payment
+exports.updateOrderStatus = async (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
   try {
-    const order = await Order.findById(req.params.id);
+    // Verify the payment using the Payment model (already separated)
+    const payment = await Payment.findOne({ orderId: razorpay_order_id });
+    
+    if (!payment) {
+      console.log("Payment not found for order ID:", razorpay_order_id);
+      return res.status(404).json({ message: 'Payment not found' });
+    }
+
+    // Update the order status based on successful payment
+    if (payment.status === 'Success') {
+      const order = await Order.findById(payment.orderId);
+      if (!order) {
+        console.log("Order not found for payment:", payment);
+        return res.status(404).json({ message: 'Order not found' });
+      }
+
+      order.status = 'Completed';
+      await order.save();
+
+      console.log("Order updated to Completed:", order);
+
+      // Send order confirmation email after payment success
+      await sendOrderConfirmationEmail(order.userDetails.email, order);
+
+      res.status(200).json({ message: 'Order updated successfully', order });
+    } else {
+      console.log("Payment not successful for order ID:", razorpay_order_id);
+      res.status(400).json({ message: 'Payment is not successful, order status cannot be updated' });
+    }
+  } catch (error) {
+    console.error("Error updating order status:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get order details by order ID
+exports.getOrderById = async (req, res) => {
+  const { orderId } = req.params;
+
+  try {
+    const order = await Order.findById(orderId);
+
     if (!order) {
+      console.log("Order not found for ID:", orderId);
       return res.status(404).json({ message: 'Order not found' });
     }
+
     res.status(200).json(order);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching order details', error });
+    console.error("Error fetching order by ID:", error.message);
+    res.status(500).json({ message: error.message });
   }
-});
+};
 
-module.exports = router;
+// Get all orders (for admin use)
+exports.getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find();
+    console.log("Fetched all orders:", orders);
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching orders:", error.message);
+    res.status(500).json({ message: 'Error fetching orders', error });
+  }
+};

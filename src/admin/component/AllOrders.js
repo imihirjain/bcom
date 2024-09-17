@@ -7,6 +7,7 @@ const AdminOrders = () => {
     const fetchOrders = async () => {
       const response = await fetch('https://bcom-backend.onrender.com/api/orders');
       const data = await response.json();
+      console.log(data);
       setOrders(data);
     };
 
@@ -27,6 +28,15 @@ const AdminOrders = () => {
                 <p className="text-base md:text-lg">Total Price: <span className="font-semibold">₹{order.totalPrice}</span></p>
                 <p className="text-base md:text-lg">Status: <span className={`font-semibold ${order.status === 'Delivered' ? 'text-green-600' : 'text-red-600'}`}>{order.status}</span></p>
               </div>
+
+              {/* User Details */}
+              {/* <div className="mb-4">
+                <h3 className="text-lg md:text-xl font-semibold mb-3 text-gray-600">User Details:</h3>
+                <p className="text-sm">Name: {order.userDetails.name}</p>
+                <p className="text-sm">Email: {order.userDetails.email}</p>
+                <p className="text-sm">Phone: {order.userDetails.phone}</p>
+                <p className="text-sm">Address: {order.userDetails.address}</p>
+              </div> */}
 
               <div className="mb-4">
                 <h3 className="text-lg md:text-xl font-semibold mb-3 text-gray-600">Items:</h3>
