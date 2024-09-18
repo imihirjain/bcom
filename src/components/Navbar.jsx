@@ -122,11 +122,10 @@ const Navbar = () => {
 
         {/* Navbar */}
         <div
-          className={`${
-            isScrolled || location.pathname !== "/"
+          className={`${isScrolled || location.pathname !== "/"
               ? "bg-white shadow-md text-black"
               : "bg-transparent text-white"
-          } fixed top-0 left-0 w-full z-50 transition-colors duration-200 hover:bg-white hover:text-black`}
+            } fixed top-0 left-0 w-full z-50 transition-colors duration-200 hover:bg-white hover:text-black`}
           onMouseEnter={handleMouseEnter} // Handle mouse enter
           onMouseLeave={handleMouseLeave} // Handle mouse leave
         >
@@ -137,15 +136,14 @@ const Navbar = () => {
               <div className="absolute left-5 top-5 md:hidden">
                 <FontAwesomeIcon
                   icon={faBars}
-                  className={`text-2xl mt-1 cursor-pointer ${
-                    showMenu || location.pathname !== "/"
+                  className={`text-2xl mt-1 cursor-pointer ${showMenu || location.pathname !== "/"
                       ? "text-black"
                       : isHovered
-                      ? "text-black"
-                      : isScrolled
-                      ? "text-black"
-                      : "text-white"
-                  }`} // Change to black if menu is open or on other pages
+                        ? "text-black"
+                        : isScrolled
+                          ? "text-black"
+                          : "text-white"
+                    }`} // Change to black if menu is open or on other pages
                   onClick={toggleMenu}
                   onMouseEnter={() => setIsHovered(true)} // Set hover state to true on mouse enter
                   onMouseLeave={() => setIsHovered(false)} // Set hover state to false on mouse leave
@@ -154,9 +152,8 @@ const Navbar = () => {
 
               {/* Navbar content (links and logo) */}
               <div
-                className={`h-[80px] flex justify-between items-center px-10 ${
-                  showMenu ? "hidden" : "" // Hide navbar content when menu is open
-                }`}
+                className={`h-[80px] flex justify-between items-center px-10 ${showMenu ? "hidden" : "" // Hide navbar content when menu is open
+                  }`}
               >
                 {/* Links for desktop */}
                 <ul className="md:flex gap-10 items-center hidden">
@@ -248,21 +245,22 @@ const Navbar = () => {
                   </li>
                 </ul>
 
-                <Link to={"/"}>
-                  <div className="flex items-center relative ">
-                    <img
-                      src={
-                        location.pathname === "/"
-                          ? isScrolled || isHovered // When scrolled or hovered on home page, show black logo
-                            ? hoverLogo // Black logo on scroll or hover for home page
-                            : logo // White logo by default for home page
-                          : hoverLogo // Black logo for all other pages
-                      }
-                      alt="Logo"
-                      className="h-[100px] w-[100px] transition-opacity duration-300"
-                    />
-                  </div>
-                </Link>
+                <div className="flex-grow text-center">
+    <Link to={"/"}>
+      <img
+        src={
+          location.pathname === "/"
+            ? isScrolled || isHovered
+              ? hoverLogo
+              : logo
+            : hoverLogo
+        }
+        alt="Logo"
+        className="h-[100px] w-[100px] mx-auto transition-opacity duration-300"
+      />
+    </Link>
+  </div>
+
 
                 <ul className="flex gap-10 items-center">
                   <li>
@@ -295,10 +293,10 @@ const Navbar = () => {
                         )}
                       </Link>
                       <Link to="/cart">
-                      <FontAwesomeIcon
-                        icon={faCartArrowDown}
-                        className="ml-2 text-xl cursor-pointer"
-                      />
+                        <FontAwesomeIcon
+                          icon={faCartArrowDown}
+                          className="ml-2 text-xl cursor-pointer"
+                        />
                       </Link>
                     </div>
                   </li>

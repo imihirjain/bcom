@@ -16,7 +16,17 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData); // Handle form submission here
+    const { name, email, phone, message } = formData;
+
+    // Create the mailto link with form data
+    const mailtoLink = `mailto:info@xyz.com?subject=New Contact Form Submission&body=Name: ${encodeURIComponent(
+      name
+    )}%0D%0AEmail: ${encodeURIComponent(email)}%0D%0APhone: ${encodeURIComponent(
+      phone
+    )}%0D%0AMessage: ${encodeURIComponent(message)}`;
+
+    // Open the mail client with the mailto link
+    window.location.href = mailtoLink;
   };
 
   return (
@@ -25,45 +35,6 @@ const Contact = () => {
         Contact
       </h1>
 
-      <div className="flex justify-center items-center font-corm font-semibold">
-        <div className="contact-details text-start text-lg mb-10">
-          <p>
-            <strong className="font-bold">For bridal appointments :</strong>{" "}
-            <a
-              href="mailto:info@angadsinghofficial.com"
-              className="text-blue-500"
-            >
-              info@xyz.com
-            </a>{" "}
-            or WhatsApp us at +91-9999999999. We will get back to you within 24
-            hours.
-          </p>
-          <p className="mt-6">
-            <strong>Head Office Address</strong>
-          </p>
-          <p>
-            702-sapphire plaza Dadabhai Road Vile parle (w) Mumbai 400056
-            Opp. CNM school
-          </p>
-          <p className="mt-6">
-            <strong>Phone</strong>
-          </p>
-          <p>For Online Sales: +91 9999999999</p>
-          <p>India (Head Office): +91 9999999999</p>
-          <p className="mt-6">
-            <strong>Email Address</strong>
-          </p>
-          <p>
-            General:{" "}
-            <a
-              href="mailto:info@angadsinghofficial.com"
-              className="text-blue-500"
-            >
-              info@xyz.com
-            </a>
-          </p>
-        </div>
-      </div>
       <form className="max-w-2xl mx-auto mb-8" onSubmit={handleSubmit}>
         <div className="flex gap-5 mb-5">
           <input

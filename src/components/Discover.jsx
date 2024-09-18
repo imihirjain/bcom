@@ -7,13 +7,12 @@ import image3 from '../assets/3.png';
 import image4 from '../assets/4.png';
 import { Link } from 'react-router-dom';
 
-
 const Discover = () => {
   const [categories, setCategories] = useState([]);
   const [showAll, setShowAll] = useState(false);
 
   // Array of images
-  const images = [ image2, image3, image4];
+  const images = [image2, image3, image4];
 
   // Fetch categories from API
   useEffect(() => {
@@ -45,36 +44,43 @@ const Discover = () => {
       {/* Grid for the images */}
       <div className="grid grid-cols-1 md:grid-cols-2 w-full mx-auto bg-gray-100 gap-8 px-8">
         {displayedCategories.map((category, index) => (
-            <Link to={`/category/${category._id}`} >
-          <div key={category._id} className="relative group mt-[40px] cursor-pointer">
-            {/* Load the image from the imported array */}
-            <img
-              src={images[index % images.length]} // Cycle through the imported images
-              alt={category.name}
-              className="w-full h-[500px] object-cover"
-            />
-            {/* Text Overlay */}
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-start p-6">
-              <h2 className="text-white text-3xl font-semibold font-corm cursor-pointer">
-                {category.name.toUpperCase()}
-              </h2>
-              <button className="mt-4 text-white border-b-2 border-white font-gara">
-                Shop Now
-              </button>
+          <Link to={`/category/${category._id}`} key={category._id}>
+            <div className="relative group mt-[40px] cursor-pointer">
+              {/* Load the image from the imported array */}
+              <img
+                src={images[index % images.length]} // Cycle through the imported images
+                alt={category.name}
+                className="w-full h-[500px] object-cover"
+              />
+              {/* Text Overlay */}
+              <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-start p-6">
+                <h2 className="text-white text-3xl font-semibold font-corm cursor-pointer">
+                  {category.name.toUpperCase()}
+                </h2>
+                <button className="mt-4 text-white border-b-2 border-white font-gara">
+                  Shop Now
+                </button>
+              </div>
             </div>
-          </div>
-              </Link>
+          </Link>
         ))}
       </div>
 
-      {/* View All Button */}
+      {/* View All / View Less Button */}
       <div className="text-center mt-8">
-        {!showAll && (
+        {!showAll ? (
           <button
             onClick={() => setShowAll(true)}
             className="px-4 py-2 bg-gray-800 text-white rounded font-gara font-semibold"
           >
             View All
+          </button>
+        ) : (
+          <button
+            onClick={() => setShowAll(false)}
+            className="px-4 py-2 bg-gray-800 text-white rounded font-gara font-semibold"
+          >
+            View Less
           </button>
         )}
       </div>

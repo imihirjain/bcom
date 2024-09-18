@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Footer from "../components/Footer";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
@@ -26,6 +29,18 @@ const Cart = () => {
     setCart(updatedCart);
     calculateTotalPrice(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+
+  // Show toast notification
+  toast.success('Item quantity increased!', {
+    position: "top-center",
+    autoClose: 2000, // Close after 2 seconds
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  });
   };
 
   // Decrement quantity
@@ -209,7 +224,10 @@ const Cart = () => {
 
   // Render cart with items and user details form
   return (
+
+    <>
     <div className="container mx-auto p-5 mt-24">
+      <ToastContainer /> 
       <h1 className="text-3xl font-bold mb-4">Your Cart</h1>
       <div className="grid gap-5">
         {cart.map((item, index) => (
@@ -280,6 +298,8 @@ const Cart = () => {
         </button>
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 
