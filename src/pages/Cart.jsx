@@ -4,21 +4,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from "../components/Footer";
 
-// Helper function to load Razorpay script dynamically
-const loadRazorpayScript = () => {
-  return new Promise((resolve) => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => {
-      resolve(true);
-    };
-    script.onerror = () => {
-      resolve(false);
-    };
-    document.body.appendChild(script);
-  });
-};
-
 const Cart = () => {
   const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -45,16 +30,17 @@ const Cart = () => {
     calculateTotalPrice(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
 
-    // Show toast notification
-    toast.success('Item quantity increased!', {
-      position: "top-center",
-      autoClose: 2000, // Close after 2 seconds
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+
+  // Show toast notification
+  toast.success('Item quantity increased!', {
+    position: "top-center",
+    autoClose: 2000, // Close after 2 seconds
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  });
   };
 
   // Decrement quantity
@@ -93,29 +79,28 @@ const Cart = () => {
 
   // Checkout handler function
   const handleCheckout = async () => {
+    const currentCart = cart.map((item) => ({
+      productId: item.id,
+      name: item.name,
+      description: item.description,
+      image: item.image,
+      price: item.price,
+      quantity: item.quantity,
+      size: item.size,
+      collection: item.collection,
+    }));
+  
     // Ensure userDetails are filled out
     if (!userDetails.name || !userDetails.phone || !userDetails.email || !userDetails.address) {
       return alert("Please fill out all user details.");
     }
-
-    // Load the Razorpay script
-    const razorpayLoaded = await loadRazorpayScript();
-    if (!razorpayLoaded) {
-      return alert("Razorpay SDK failed to load. Please try again.");
-    }
-
+  
+    // Log userDetails and cart data before sending to backend
+    console.log("User details being sent:", userDetails);
+    console.log("Cart data being sent:", currentCart);
+    console.log("Total price being sent:", totalPrice);
+  
     try {
-      const currentCart = cart.map((item) => ({
-        productId: item.id,
-        name: item.name,
-        description: item.description,
-        image: item.image,
-        price: item.price,
-        quantity: item.quantity,
-        size: item.size,
-        collection: item.collection,
-      }));
-
       // Step 1: Create an order for payment on the backend
       const paymentResponse = await fetch("https://bcom-backend.onrender.com/api/payments", {
         method: "POST",
@@ -127,23 +112,30 @@ const Cart = () => {
           userDetails: userDetails,  // User details
         }),
       });
-
+  
       const order = await paymentResponse.json();
+      console.log("Received response from payment API:", order);
+  
       if (order && order.id) {
+        // Log order information before proceeding
+        console.log("Order created successfully with ID:", order.id);
+  
+        // Step 2: Set up Razorpay options for payment
         const options = {
-          key: order.razorpayKey, // Razorpay key from backend
-          amount: order.amount, // Amount in paise (e.g., INR 500 = 50000 paise)
+          key: order.razorpayKey,  // Razorpay key from backend
+          amount: order.amount,  // Amount in paise (e.g., INR 500 = 50000 paise)
           currency: order.currency,
-          order_id: order.id, // Order ID from backend
+          order_id: order.id,  // Order ID from backend
           handler: async function (response) {
             const paymentData = {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
             };
-
+  
+            console.log("Received payment details from Razorpay:", paymentData);
+  
             try {
-              // Verify payment
               const verifyResponse = await fetch(
                 "https://bcom-backend.onrender.com/api/payments/verify",
                 {
@@ -152,22 +144,33 @@ const Cart = () => {
                   body: JSON.stringify(paymentData),
                 }
               );
+  
               const verifyResult = await verifyResponse.json();
-
+              console.log("Payment verification result:", verifyResult);
+  
               if (verifyResponse.ok) {
-                // Send order data to backend after payment success
-                await fetch("https://bcom-backend.onrender.com/api/orders", {
+                console.log("Payment verification successful. Sending data to order API:", {
+                  cartItems: currentCart,
+                  totalPrice: totalPrice,
+                  paymentData: paymentData,
+                  userDetails: userDetails,  // Include user details in the request
+                });
+  
+                const orderResponse = await fetch("https://bcom-backend.onrender.com/api/orders", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
                     cartItems: currentCart,
                     totalPrice: totalPrice,
                     paymentData: paymentData,
-                    userDetails: userDetails,
+                    userDetails: userDetails,  // Include user details in the order
                   }),
                 });
-
-                // Clear the cart after successful payment
+  
+                const orderResult = await orderResponse.json();
+                console.log("Order creation result:", orderResult);
+  
+                // Clear the cart and navigate to the orders page after successful payment
                 setCart([]);
                 localStorage.removeItem("cart");
                 navigate("/admin/all-orders");
@@ -189,7 +192,7 @@ const Cart = () => {
             color: "#F37254",
           },
         };
-
+  
         const rzp = new window.Razorpay(options);
         rzp.open();
       } else {
@@ -200,13 +203,14 @@ const Cart = () => {
       alert("Something went wrong during checkout. Please try again.");
     }
   };
-
+  
+  
   // Render empty cart message if no items
   if (cart.length === 0) {
     return (
       <div className="container mx-auto text-center mt-24">
         <img
-          src="https://collection.cloudinary.com/dbn9fwzwk/7e4ec30888b2db0e5c59ceea24e87082" // Replace with actual icon URL
+          src="your-empty-cart-icon-url" // Replace with actual icon URL
           alt="Empty Cart"
           className="mx-auto mb-4 w-32 h-32"
         />
@@ -220,80 +224,81 @@ const Cart = () => {
 
   // Render cart with items and user details form
   return (
+
     <>
-      <div className="container mx-auto p-5 mt-24">
-        <ToastContainer />
-        <h1 className="text-3xl font-bold mb-4">Your Cart</h1>
-        <div className="grid gap-5">
-          {cart.map((item, index) => (
-            <div key={item.id} className="flex justify-between items-center p-4 border-b">
-              <div className="flex gap-4">
-                <img src={item.image} alt={item.name} className="w-20 h-20" />
-                <div>
-                  <h2 className="font-bold text-xl">{item.name}</h2>
-                  <p>Price: ₹{item.price}</p>
-                  <p>Size: {item.size}</p>
-                  <div className="flex items-center mt-2">
-                    <button onClick={() => handleDecrement(index)} className="px-4 py-2 bg-gray-200">
-                      -
-                    </button>
-                    <span className="px-4">{item.quantity}</span>
-                    <button onClick={() => handleIncrement(index)} className="px-4 py-2 bg-gray-200">
-                      +
-                    </button>
-                  </div>
-                  <button onClick={() => handleRemove(index)} className="bg-red-500 text-white px-6 py-2 mt-4">
-                    Remove
+    <div className="container mx-auto p-5 mt-24">
+      <ToastContainer /> 
+      <h1 className="text-3xl font-bold mb-4">Your Cart</h1>
+      <div className="grid gap-5">
+        {cart.map((item, index) => (
+          <div key={item.id} className="flex justify-between items-center p-4 border-b">
+            <div className="flex gap-4">
+              <img src={item.image} alt={item.name} className="w-20 h-20" />
+              <div>
+                <h2 className="font-bold text-xl">{item.name}</h2>
+                <p>Price: ₹{item.price}</p>
+                <p>Size: {item.size}</p>
+                <div className="flex items-center mt-2">
+                  <button onClick={() => handleDecrement(index)} className="px-4 py-2 bg-gray-200">
+                    -
+                  </button>
+                  <span className="px-4">{item.quantity}</span>
+                  <button onClick={() => handleIncrement(index)} className="px-4 py-2 bg-gray-200">
+                    +
                   </button>
                 </div>
+                <button onClick={() => handleRemove(index)} className="bg-red-500 text-white px-6 py-2 mt-4">
+                  Remove
+                </button>
               </div>
-              <p>Total: ₹{item.price * item.quantity}</p>
             </div>
-          ))}
-        </div>
-
-        <div className="mt-6">
-          <h2 className="text-2xl font-semibold">Total Price: ₹{totalPrice}</h2>
-          <h3 className="text-xl mt-4">Shipping Details</h3>
-          <div className="grid gap-4 mt-4">
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter Name"
-              value={userDetails.name}
-              onChange={handleUserDetailsChange}
-              className="p-2 border"
-            />
-            <input
-              type="text"
-              name="phone"
-              placeholder="Enter Phone Number"
-              value={userDetails.phone}
-              onChange={handleUserDetailsChange}
-              className="p-2 border"
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter Email"
-              value={userDetails.email}
-              onChange={handleUserDetailsChange}
-              className="p-2 border"
-            />
-            <textarea
-              name="address"
-              placeholder="Enter Address"
-              value={userDetails.address}
-              onChange={handleUserDetailsChange}
-              className="p-2 border"
-            />
+            <p>Total: ₹{item.price * item.quantity}</p>
           </div>
-          <button onClick={handleCheckout} className="bg-blue-500 text-white px-6 py-2 mt-4">
-            Proceed to Checkout
-          </button>
-        </div>
+        ))}
       </div>
-      <Footer />
+
+      <div className="mt-6">
+        <h2 className="text-2xl font-semibold">Total Price: ₹{totalPrice}</h2>
+        <h3 className="text-xl mt-4">Shipping Details</h3>
+        <div className="grid gap-4 mt-4">
+          <input
+            type="text"
+            name="name"
+            placeholder="Enter Name"
+            value={userDetails.name}
+            onChange={handleUserDetailsChange}
+            className="p-2 border"
+          />
+          <input
+            type="text"
+            name="phone"
+            placeholder="Enter Phone Number"
+            value={userDetails.phone}
+            onChange={handleUserDetailsChange}
+            className="p-2 border"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter Email"
+            value={userDetails.email}
+            onChange={handleUserDetailsChange}
+            className="p-2 border"
+          />
+          <textarea
+            name="address"
+            placeholder="Enter Address"
+            value={userDetails.address}
+            onChange={handleUserDetailsChange}
+            className="p-2 border"
+          />
+        </div>
+        <button onClick={handleCheckout} className="bg-blue-500 text-white px-6 py-2 mt-4">
+          Proceed to Checkout
+        </button>
+      </div>
+    </div>
+    <Footer />
     </>
   );
 };
