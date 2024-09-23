@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,6 +9,7 @@ const VideoUpload = () => {
   const [videoUrl, setVideoUrl] = useState(''); // To store video URL after upload
   const [editMode, setEditMode] = useState(false); // Toggle between upload/update modes
   const [videoId, setVideoId] = useState(null); // For updating video by ID
+  const [videos, setVideos] = useState([]); // To store fetched videos
 
   // Handle video file selection
   const handleFileChange = (e) => {
@@ -38,6 +39,7 @@ const VideoUpload = () => {
       setVideoUrl(response.data.videoUrl);
       setVideoFile(null);
       toast.success('Video uploaded successfully!');
+      fetchAllVideos(); // Fetch videos again after upload
     } catch (error) {
       toast.error('Failed to upload video');
       console.error(error);
@@ -69,11 +71,28 @@ const VideoUpload = () => {
       setEditMode(false);
       setVideoId(null);
       toast.success('Video updated successfully!');
+      fetchAllVideos(); // Fetch videos again after update
     } catch (error) {
       toast.error('Failed to update video');
       console.error(error);
     }
   };
+
+  // Fetch all videos from the API
+  const fetchAllVideos = async () => {
+    try {
+      const response = await axios.get('https://bcom-backend.onrender.com/api/video');
+      setVideos(response.data || []); // Ensure the response is always an array
+    } catch (error) {
+      toast.error('Failed to fetch videos');
+      console.error(error);
+    }
+  };
+
+  // Fetch videos on component mount
+  useEffect(() => {
+    fetchAllVideos();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10">
@@ -143,6 +162,22 @@ const VideoUpload = () => {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Show all videos */}
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-4xl w-full">
+        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">All Videos</h2>
+        {videos && videos.length > 0 ? ( // Add a check for videos being not undefined
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {videos.map((video) => (
+              <div key={video._id} className="rounded-lg shadow-lg">
+                <video controls src={video.videoUrl} className="w-full rounded-lg" />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-500">No videos available</p>
+        )}
       </div>
     </div>
   );

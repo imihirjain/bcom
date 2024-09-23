@@ -54,9 +54,9 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/admin/video-upload" className="flex items-center space-x-3 hover:bg-gray-700 p-2 rounded transition-all duration-200">
+            <Link to="/admin/media" className="flex items-center space-x-3 hover:bg-gray-700 p-2 rounded transition-all duration-200">
               <FiVideo size={20} />
-              <span>Video Upload</span>
+              <span>Slider Media</span>
             </Link>
           </li>
         </ul>

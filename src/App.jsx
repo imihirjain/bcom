@@ -27,6 +27,7 @@ import Carrer from "./pages/Carrer";
 import Shipping from "./pages/Shipping";
 import Refund from "./pages/Refund";
 import Faq from "./pages/Faq";
+import AdminMedia from "./admin/component/AdminMedia";
 
 function App() {
   return (
@@ -80,6 +81,7 @@ function App() {
           <Route path="all-orders" element={<AllOrders />} />
           <Route path="video-upload" element={<VideoUpload />} />
           <Route path="orders" element={<AllOrders />} />
+          <Route path="media" element={<AdminMedia/>} />
         </Route>
       </Routes>
     </div>
