@@ -66,7 +66,6 @@ exports.createPayment = async (req, res) => {
 
 
 
-
 exports.verifyPayment = async (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
@@ -77,47 +76,28 @@ exports.verifyPayment = async (req, res) => {
 
   try {
     if (generatedSignature === razorpay_signature) {
-      // If signature matches, mark the payment as verified and save it
-      const payment = await Payment.findOne({ orderId: razorpay_order_id });
-      if (!payment) {
-        return res.status(404).json({ message: 'Payment not found' });
+      // Find the order by the razorpay_order_id instead of the MongoDB _id
+      const order = await Order.findOne({ "paymentData.razorpay_order_id": razorpay_order_id });
+
+      if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
       }
 
-      payment.paymentId = razorpay_payment_id;
-      payment.signature = razorpay_signature;
-      payment.status = 'Success';
+      // Update the payment data and status
+      order.paymentData.razorpay_payment_id = razorpay_payment_id;
+      order.paymentData.razorpay_signature = razorpay_signature;
+      order.status = 'Completed';
+      await order.save();
 
-      await payment.save();
-
-      // Find the related order and update its status to 'Completed'
-      const order = await Order.findById(payment.orderId);
-      if (order) {
-        order.status = 'Completed';
-        await order.save();
-      }
-
-      res.status(200).json({ message: 'Payment verified successfully and order updated', payment });
+      res.status(200).json({ message: 'Payment verified successfully and order updated', order });
     } else {
-      // If the signature is invalid, mark the payment as 'Failed'
-      const payment = await Payment.findOne({ orderId: razorpay_order_id });
-      if (payment) {
-        payment.status = 'Failed';
-        await payment.save();
-
-        // Also, update the order status to 'Failed'
-        const order = await Order.findById(payment.orderId);
-        if (order) {
-          order.status = 'Failed';
-          await order.save();
-        }
-      }
-
-      res.status(400).json({ message: 'Invalid payment signature, payment failed' });
+      res.status(400).json({ message: 'Invalid payment signature' });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 
