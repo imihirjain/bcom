@@ -21,7 +21,9 @@ const Contact = () => {
     // Create the mailto link with form data
     const mailtoLink = `mailto:info@xyz.com?subject=New Contact Form Submission&body=Name: ${encodeURIComponent(
       name
-    )}%0D%0AEmail: ${encodeURIComponent(email)}%0D%0APhone: ${encodeURIComponent(
+    )}%0D%0AEmail: ${encodeURIComponent(
+      email
+    )}%0D%0APhone: ${encodeURIComponent(
       phone
     )}%0D%0AMessage: ${encodeURIComponent(message)}`;
 
@@ -31,7 +33,7 @@ const Contact = () => {
 
   return (
     <div className="container mx-auto p-5 mt-24 ">
-      <h1 className="text-center text-3xl font-bold font-corm mb-8 uppercase">
+      <h1 className="text-center text-3xl font-bold font-indif mb-8 uppercase">
         Contact
       </h1>
 
@@ -75,7 +77,7 @@ const Contact = () => {
         <div className="text-center">
           <button
             type="submit"
-            className="px-8 py-3 bg-[#cdac99] text-white rounded-md hover:bg-[#b39584] transition duration-300"
+            className="px-8 py-3 bg-[#cdac99] font-gara text-white rounded-md hover:bg-[#b39584] transition duration-300"
           >
             Send
           </button>

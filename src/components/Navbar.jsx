@@ -9,7 +9,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom"; // Import useLocation
 import Slider from "./Slider"; // Import Slider component
 import logo from "../assets/HS&DV/DVW.png";
-import hoverLogo from "../assets/HS&DV/DB.png";
+import hoverLogo from "../assets/DV.PNG";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -124,7 +124,7 @@ const Navbar = () => {
   };
   return (
     <>
-      <div className="relative w-full overflow-x-hidden">
+      <div className="relative w-full overflow-x-hidden font-semibold font-indif">
         {/* Only render the Slider on the Home page (path === "/") */}
         {location.pathname === "/" ? (
           <div className="">
@@ -177,7 +177,7 @@ const Navbar = () => {
                   <li>
                     <Link
                       to="/"
-                      className="hover:border-b-2 hover:border-black font-corm"
+                      className="hover:border-b-2 hover:border-black font-indif"
                     >
                       Home
                     </Link>
@@ -185,16 +185,16 @@ const Navbar = () => {
                   <li className="relative group">
                     <Link
                       to="/about"
-                      className="hover:border-b-2 hover:border-black font-corm"
+                      className="hover:border-b-2 hover:border-black font-indif"
                     >
                       About
                     </Link>
                     <div className="absolute left-0 top-full bg-white shadow-lg hidden group-hover:block">
                       <ul className="p-5">
-                        <li className="hover:bg-gray-100 px-3 py-2 font-corm">
+                        <li className="hover:bg-gray-100 px-3 py-2 font-indif">
                           <Link to="#founder">Founder</Link>
                         </li>
-                        <li className="hover:bg-gray-100 px-3 py-2 font-corm">
+                        <li className="hover:bg-gray-100 px-3 py-2 font-indif">
                           <Link to="#legacy">Legacy</Link>
                         </li>
                       </ul>
@@ -203,7 +203,7 @@ const Navbar = () => {
                   <li className="relative group">
                     <Link
                       to=""
-                      className="hover:border-b-2 hover:border-black font-corm"
+                      className="hover:border-b-2 hover:border-black font-indif"
                     >
                       Shop
                     </Link>
@@ -211,10 +211,10 @@ const Navbar = () => {
                     <div className="fixed inset-0 top-[50px] w-full h-96 bg-white shadow-lg hidden group-hover:flex p-5 gap-10 z-50">
                       {/* Categories Column */}
                       <div className="flex-grow ">
-                        <h3 className="text-lg text-center font-semibold mb-3 font-corm">
+                        <h3 className="text-lg text-center font-semibold mb-3 font-indif">
                           Categories
                         </h3>
-                        <div className="font-corm font-semibold">
+                        <div className="font-indif font-semibold">
                           <ul>
                             {categories.map((category) => (
                               <li
@@ -231,10 +231,10 @@ const Navbar = () => {
                       </div>
                       {/* Collections Column */}
                       <div className="flex-grow">
-                        <h3 className="text-lg font-semibold mb-3 font-corm">
+                        <h3 className="text-lg font-semibold mb-3 font-indif">
                           Collections
                         </h3>
-                        <div className="font-corm font-semibold">
+                        <div className="font-indif font-semibold">
                           <ul>
                             {collections.map((collection) => (
                               <li
@@ -255,7 +255,7 @@ const Navbar = () => {
                   <li>
                     <Link
                       to="/contact"
-                      className="hover:border-b-2 hover:border-black font-corm"
+                      className="hover:border-b-2 hover:border-black font-indif"
                     >
                       Contact
                     </Link>
@@ -273,7 +273,7 @@ const Navbar = () => {
                           : hoverLogo
                       }
                       alt="Logo"
-                      className="h-[100px] w-[100px] mx-auto transition-opacity duration-300"
+                      className="h-[200px] w-[200px] lg:text-center lg:ml-80  transition-opacity duration-300"
                     />
                   </Link>
                 </div>
@@ -284,7 +284,7 @@ const Navbar = () => {
                       <a
                         href="#search"
                         onClick={handleSearchClick}
-                        className="hover:border-b-2 font-corm hover:border-black cursor-pointer"
+                        className="hover:border-b-2 font-indif hover:border-black cursor-pointer"
                       >
                         <span className="hidden lg:block">Search</span>
                       </a>
@@ -299,7 +299,7 @@ const Navbar = () => {
                     <div className="flex ">
                       <Link
                         to="/cart"
-                        className="hover:border-b-2 relative hover:border-black font-corm"
+                        className="hover:border-b-2 relative hover:border-black font-indif"
                       >
                         <span className="hidden lg:block">Cart</span>
                         {cartCount > 0 && (
@@ -334,7 +334,7 @@ const Navbar = () => {
                 className="border h-[50px] mt-5 ml-5 rounded-md border-gray-300 p-1 w-[580px]"
                 placeholder="Search products..."
               />
-              <button className="ml-2  h-[50px] mt-5 rounded-md px-4 bg-[#cdac99] text-black font-corm ">
+              <button className="ml-2  h-[50px] mt-5 rounded-md px-4 bg-[#cdac99] text-black font-indif ">
                 Search
               </button>
               <FontAwesomeIcon
@@ -358,22 +358,22 @@ const Navbar = () => {
                 className="text-2xl cursor-pointer ml-[170px] mt-2 text-black "
                 onClick={toggleMenu}
               />
-              <div className="flex justify-between items-center text-xl font-bold font-corm">
+              <div className="flex justify-between items-center text-xl font-bold font-indif">
                 <h1 className="mt-10">Menu</h1>
               </div>
               <ul className="mt-5">
-                <li className="hover:bg-gray-100 px-3 py-2 font-corm">
+                <li className="hover:bg-gray-100 px-3 py-2 font-indif">
                   <Link to="/" onClick={toggleMenu}>
                     Home
                   </Link>
                 </li>
-                <li className="hover:bg-gray-100 px-3 py-2 font-corm">
+                <li className="hover:bg-gray-100 px-3 py-2 font-indif">
                   <Link to="/about" onClick={toggleMenu}>
                     About
                   </Link>
                 </li>
 
-                <li className="hover:bg-gray-100 px-3 py-2 font-corm">
+                <li className="hover:bg-gray-100 px-3 py-2 font-indif">
                   <Link to="" onClick={toggleMenu}>
                     Shop
                   </Link>
@@ -396,7 +396,7 @@ const Navbar = () => {
                         {categories.map((category) => (
                           <li
                             key={category._id}
-                            className="hover:bg-gray-200 px-3 py-1 font-corm"
+                            className="hover:bg-gray-200 px-3 py-1 font-indif"
                           >
                             <Link
                               to={`/category/${category._id}`}
@@ -426,7 +426,7 @@ const Navbar = () => {
                         {collections.map((collection) => (
                           <li
                             key={collection._id}
-                            className="hover:bg-gray-200 px-3 py-1 font-corm"
+                            className="hover:bg-gray-200 px-3 py-1 font-indif"
                           >
                             <Link
                               to={`/collection/${collection._id}`}
@@ -441,12 +441,12 @@ const Navbar = () => {
                   </ul>
                 </li>
 
-                <li className="hover:bg-gray-100 px-3 py-2 font-corm">
+                <li className="hover:bg-gray-100 px-3 py-2 font-indif">
                   <Link to="/contact" onClick={toggleMenu}>
                     Contact
                   </Link>
                 </li>
-                <li className="hover:bg-gray-100 px-3 py-2 font-corm">
+                <li className="hover:bg-gray-100 px-3 py-2 font-indif">
                   <Link
                     to="http://heeteshshah.com/"
                     onClick={toggleMenu}

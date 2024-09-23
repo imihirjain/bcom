@@ -44,12 +44,12 @@ const VideoHome = () => {
         {/* Icon 1 with Text */}
         <div className="flex  flex-col items-center">
           <FaTruck className="text-3xl text-gray-800" /> {/* Shipping Icon */}
-          <p className="mt-2 text-gray-700 font-corm font-bold text-xl">Free Shipping</p>
+          <p className="mt-2 text-gray-700 font-indif font-bold text-xl">Free Shipping</p>
         </div>
         {/* Icon 2 with Text */}
         <div className="flex flex-col items-center">
           <FaGlobe className="text-3xl text-gray-800" /> {/* Worldwide Delivery Icon */}
-          <p className="mt-2 text-gray-700 font-corm font-bold text-xl">Worldwide Delivery</p>
+          <p className="mt-2 text-gray-700 font-indif font-bold text-xl">Worldwide Delivery</p>
         </div>
       </div>
     </div>

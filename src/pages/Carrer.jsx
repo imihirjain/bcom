@@ -45,12 +45,12 @@ const Career = () => {
   };
 
   return (
-    <div className="mt-24 text-center font-corm font-bold">
+    <div className="mt-24 text-center font-indif font-bold">
       <h1 className="text-2xl">Career</h1>
-      <p className="text-lg mb-8">Want to join Dev and Viv team</p>
+      <p className="text-lg mb-8 font-gara">Want to join Dev and Viv team</p>
 
       <form
-        className="w-full max-w-lg mx-auto bg-gray-100 p-6 rounded-md shadow-md"
+        className="w-full max-w-lg mx-auto font-gara bg-gray-100 p-6 rounded-md shadow-md"
         onSubmit={handleSubmit}
       >
         <div className="mb-4">
