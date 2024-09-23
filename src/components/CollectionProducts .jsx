@@ -49,15 +49,23 @@ const CollectionProducts = () => {
   // Function to handle sorting
   const handleSort = (option) => {
     let sortedProducts = [...products];
+
     if (option === "atoz") {
       sortedProducts.sort((a, b) => a.name.localeCompare(b.name)); // Sort A to Z by name
+    } else if (option === "ztoa") {
+      sortedProducts.sort((a, b) => b.name.localeCompare(a.name)); // Sort Z to A by name
     } else if (option === "newtoold") {
-      sortedProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sort New to Old
+      sortedProducts.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      ); // Sort New to Old
     } else if (option === "prizehightolow") {
       sortedProducts.sort((a, b) => b.price - a.price); // Sort Price High to Low
+    } else if (option === "prizelowtohigh") {
+      sortedProducts.sort((a, b) => a.price - b.price); // Sort Price Low to High
     }
-    setFilteredProducts(sortedProducts);
-    setSortOption(option);
+
+    setFilteredProducts(sortedProducts); // Update the filtered products state with sorted list
+    setSortOption(option); // Update the selected sort option
   };
 
   // Render loading, error, or product grid
@@ -65,14 +73,17 @@ const CollectionProducts = () => {
     <>
       <div className="mt-24 font-corm font-semibold">
         <h2 className="text-xl font-bold ml-7">
-      Collection's:    {collectionName ? `${collectionName} ` : "Collection Products"}
+          Collection's:{" "}
+          {collectionName ? `${collectionName} ` : "Collection Products"}
         </h2>
         {loading && <p>Loading products...</p>}
         {error && <p>{error}</p>}
 
         {/* Sort/Filter Dropdown */}
         <div className="ml-7 mt-5">
-          <label htmlFor="sort" className="font-semibold">Sort By:</label>
+          <label htmlFor="sort" className="font-semibold">
+            Sort By:
+          </label>
           <select
             id="sort"
             className="ml-2 p-2 border border-gray-300 rounded"
@@ -81,14 +92,19 @@ const CollectionProducts = () => {
           >
             <option value="">Select</option>
             <option value="atoz">A to Z</option>
-            <option value="newtoold">New to Old</option>
+            <option value="ztoa">Z to A</option>
             <option value="prizehightolow">Price High to Low</option>
+            <option value="prizelowtohigh">Price Low to High</option>
+            <option value="newtoold">New to Old</option>
           </select>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10">
           {filteredProducts.map((product) => (
-            <div key={product._id} className="relative group shadow-md ml-7 p-4 bg-white rounded-sm h-full">
+            <div
+              key={product._id}
+              className="relative group shadow-md ml-7 p-4 bg-white rounded-sm h-full"
+            >
               {/* Product Image */}
               <div className="relative w-full overflow-hidden rounded-sm">
                 {product.images && product.images.length > 0 && (
@@ -127,7 +143,9 @@ const CollectionProducts = () => {
               {/* Product Info */}
               <h3 className="text-lg font-bold mt-4">{product.name}</h3>
               <p className="text-sm text-gray-600">{product.description}</p>
-              <p className="text-sm text-gray-800 font-semibold">Price: Rs. {product.price}</p>
+              <p className="text-sm text-gray-800 font-semibold">
+                Price: Rs. {product.price}
+              </p>
               <p className="text-sm text-gray-800">Size: {product.size}</p>
             </div>
           ))}

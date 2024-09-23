@@ -55,15 +55,23 @@ const CategoryProducts = () => {
   // Function to handle sorting
   const handleSort = (option) => {
     let sortedProducts = [...products];
+
     if (option === "atoz") {
       sortedProducts.sort((a, b) => a.name.localeCompare(b.name)); // Sort A to Z by name
+    } else if (option === "ztoa") {
+      sortedProducts.sort((a, b) => b.name.localeCompare(a.name)); // Sort Z to A by name
     } else if (option === "newtoold") {
-      sortedProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sort New to Old
+      sortedProducts.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      ); // Sort New to Old
     } else if (option === "prizehightolow") {
       sortedProducts.sort((a, b) => b.price - a.price); // Sort Price High to Low
+    } else if (option === "prizelowtohigh") {
+      sortedProducts.sort((a, b) => a.price - b.price); // Sort Price Low to High
     }
-    setFilteredProducts(sortedProducts);
-    setSortOption(option);
+
+    setFilteredProducts(sortedProducts); // Update the filtered products state with sorted list
+    setSortOption(option); // Update the selected sort option
   };
 
   // Render loading, error, or product grid
@@ -71,14 +79,16 @@ const CategoryProducts = () => {
     <>
       <div className="mt-24 font-corm font-semibold">
         <h2 className="text-xl font-bold ml-7">
-        Category:  {categoryName ? `${categoryName} ` : "Category Products"}
+          Category: {categoryName ? `${categoryName} ` : "Category Products"}
         </h2>
         {loading && <p>Loading products...</p>}
         {error && <p>{error}</p>}
 
         {/* Sort/Filter Dropdown */}
         <div className="ml-7 mt-5">
-          <label htmlFor="sort" className="font-semibold">Sort By:</label>
+          <label htmlFor="sort" className="font-semibold">
+            Sort By:
+          </label>
           <select
             id="sort"
             className="ml-2 p-2 border border-gray-300 rounded"
@@ -87,8 +97,10 @@ const CategoryProducts = () => {
           >
             <option value="">Select</option>
             <option value="atoz">A to Z</option>
-            <option value="newtoold">New to Old</option>
+            <option value="ztoa">Z to A</option>
             <option value="prizehightolow">Price High to Low</option>
+            <option value="prizelowtohigh">Price Low to High</option>
+            <option value="newtoold">New to Old</option>
           </select>
         </div>
 
