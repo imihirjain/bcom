@@ -13,7 +13,7 @@ const collectionProductRoutes = require('./routes/collectionProductRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const videoRoutes = require('./routes/videoRoutes');
 const orderRoutes = require('./routes/orders');
-
+const mediaRoutes = require('./routes/mediaRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -37,6 +37,7 @@ app.use('/api/collection-products', collectionProductRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api', videoRoutes);
 app.use('/api', orderRoutes);
+// app.use('/api/media', mediaRoutes);
 
 // Serve static files from the front-end build folder if you have a front-end
 app.use(express.static(path.join(__dirname, 'build')));
