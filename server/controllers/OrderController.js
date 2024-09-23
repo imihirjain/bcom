@@ -66,36 +66,36 @@ exports.updateOrderStatus = async (req, res) => {
     const payment = await Payment.findOne({ orderId: razorpay_order_id });
     
     if (!payment) {
-      console.log("Payment not found for order ID:", razorpay_order_id);
       return res.status(404).json({ message: 'Payment not found' });
     }
 
-    // Update the order status based on successful payment
-    if (payment.status === 'Success') {
-      const order = await Order.findById(payment.orderId);
-      if (!order) {
-        console.log("Order not found for payment:", payment);
-        return res.status(404).json({ message: 'Order not found' });
-      }
+    // Check the status of the payment and update the order accordingly
+    const order = await Order.findById(payment.orderId);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
 
+    if (payment.status === 'Success') {
       order.status = 'Completed';
       await order.save();
-
-      console.log("Order updated to Completed:", order);
 
       // Send order confirmation email after payment success
       await sendOrderConfirmationEmail(order.userDetails.email, order);
 
-      res.status(200).json({ message: 'Order updated successfully', order });
+      res.status(200).json({ message: 'Order updated to Completed successfully', order });
+    } else if (payment.status === 'Failed') {
+      order.status = 'Failed';
+      await order.save();
+      res.status(400).json({ message: 'Payment failed, order status updated to Failed' });
     } else {
-      console.log("Payment not successful for order ID:", razorpay_order_id);
-      res.status(400).json({ message: 'Payment is not successful, order status cannot be updated' });
+      res.status(400).json({ message: 'Payment is not completed yet, order remains Pending' });
     }
+
   } catch (error) {
-    console.error("Error updating order status:", error.message);
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Get order details by order ID
 exports.getOrderById = async (req, res) => {
