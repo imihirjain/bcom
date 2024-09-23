@@ -77,8 +77,8 @@ const CategoryProducts = () => {
   // Render loading, error, or product grid
   return (
     <>
-      <div className="mt-24 font-corm font-semibold">
-        <h2 className="text-xl font-bold ml-7">
+      <div className="mt-24 font-indif font-semibold">
+        <h2 className="text-xl font-bold ml-7 font-indif">
           Category: {categoryName ? `${categoryName} ` : "Category Products"}
         </h2>
         {loading && <p>Loading products...</p>}
@@ -86,12 +86,12 @@ const CategoryProducts = () => {
 
         {/* Sort/Filter Dropdown */}
         <div className="ml-7 mt-5">
-          <label htmlFor="sort" className="font-semibold">
+          <label htmlFor="sort" className="font-semibold font-gara">
             Sort By:
           </label>
           <select
             id="sort"
-            className="ml-2 p-2 border border-gray-300 rounded"
+            className="ml-2 p-2 border font-gara border-gray-300 rounded"
             value={sortOption}
             onChange={(e) => handleSort(e.target.value)}
           >
@@ -134,24 +134,30 @@ const CategoryProducts = () => {
 
                 {/* Quick Buy Button */}
                 <Link to={`/product/${product._id}`}>
-                  <button className="absolute bottom-2 w-full left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white px-4 py-2 text-black font-bold shadow-md">
+                  <button className="absolute bottom-2 w-full left-1/2 font-gara transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white px-4 py-2 text-black font-bold shadow-md">
                     Quick Buy
                   </button>
                 </Link>
 
                 {/* Ready to Ship */}
-                <span className="absolute top-2 right-2 bg-white text-red-500 px-3 py-1 rounded">
+                <span className="absolute top-2 right-2 bg-white font-gara text-red-500 px-3 py-1 rounded">
                   Ready To Ship
                 </span>
               </div>
 
               {/* Product Info */}
-              <h3 className="text-lg font-bold mt-4">{product.name}</h3>
-              <p className="text-sm text-gray-600">{product.description}</p>
-              <p className="text-sm text-gray-800 font-semibold">
+              <h3 className="text-lg font-bold font-indif mt-4">
+                {product.name}
+              </h3>
+              <p className="text-sm text-gray-600 font-gara">
+                {product.description}
+              </p>
+              <p className="text-sm text-gray-800 font-semibold font-gara">
                 Price: Rs. {product.price}
               </p>
-              <p className="text-sm text-gray-800">Size: {product.size}</p>
+              <p className="text-sm font-gara text-gray-800">
+                Size: {product.size}
+              </p>
             </div>
           ))}
         </div>

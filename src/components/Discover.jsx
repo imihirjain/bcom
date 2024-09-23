@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 // Import images from the assets folder
-import image2 from '../assets/2.png';
-import image3 from '../assets/3.png';
-import image4 from '../assets/4.png';
-import { Link } from 'react-router-dom';
+import image2 from "../assets/2.png";
+import image3 from "../assets/3.png";
+import image4 from "../assets/4.png";
+import { Link } from "react-router-dom";
 
 const Discover = () => {
   const [categories, setCategories] = useState([]);
@@ -18,10 +18,12 @@ const Discover = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('https://bcom-backend.onrender.com/api/categories');
+        const response = await axios.get(
+          "https://bcom-backend.onrender.com/api/categories"
+        );
         setCategories(response.data);
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error("Error fetching categories:", error);
       }
     };
 
@@ -35,7 +37,9 @@ const Discover = () => {
     <>
       {/* Center the heading and paragraph */}
       <div className="mt-[80px] text-center bg-gray-100 flex flex-col items-center">
-        <h1 className="uppercase text-[25px] font-corm font-semibold">Discover</h1>
+        <h1 className="uppercase text-[25px] font-indif font-semibold">
+          Discover
+        </h1>
         <p className="text-[20px] text-gray-800 font-gara font-semibold mt-3">
           The eternal through its creation.
         </p>
@@ -54,7 +58,7 @@ const Discover = () => {
               />
               {/* Text Overlay */}
               <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-start p-6">
-                <h2 className="text-white text-3xl font-semibold font-corm cursor-pointer">
+                <h2 className="text-white text-3xl font-semibold font-indif cursor-pointer">
                   {category.name.toUpperCase()}
                 </h2>
                 <button className="mt-4 text-white border-b-2 border-white font-gara">
