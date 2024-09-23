@@ -210,7 +210,7 @@ const Cart = () => {
     return (
       <div className="container mx-auto text-center mt-24">
         <img
-          src="your-empty-cart-icon-url" // Replace with actual icon URL
+          src="https://collection.cloudinary.com/dbn9fwzwk/7e4ec30888b2db0e5c59ceea24e87082" // Replace with actual icon URL
           alt="Empty Cart"
           className="mx-auto mb-4 w-32 h-32"
         />
