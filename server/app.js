@@ -13,7 +13,7 @@ const collectionProductRoutes = require('./routes/collectionProductRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const videoRoutes = require('./routes/videoRoutes');
 const orderRoutes = require('./routes/orders');
-const mediaRoutes = require('./routes/mediaRoutes');
+// const mediaRoutes = require('./routes/mediaRoutes');
 
 // Load environment variables
 dotenv.config();
