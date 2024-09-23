@@ -25,7 +25,7 @@ exports.createOrder = async (req, res) => {
       totalPrice,
       paymentData,
       userDetails,
-      status: 'Pending',
+      status: 'Completed',
     });
 
     // Log new order details before saving
