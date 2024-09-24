@@ -262,7 +262,7 @@ const Navbar = () => {
                   </li>
                   <li className="hover:bg-gray-100 px-3 py-2 font-indif">
                     <Link
-                      to="http://heeteshshah.com/"
+                      to="https://heetesh-shah.vercel.app/"
                       onClick={toggleMenu}
                       target="_blank"
                     >
@@ -456,7 +456,7 @@ const Navbar = () => {
                 </li>
                 <li className="hover:bg-gray-100 px-3 py-2 font-indif">
                   <Link
-                    to="http://heeteshshah.com/"
+                    to="https://heetesh-shah.vercel.app/"
                     onClick={toggleMenu}
                     target="_blank"
                   >
