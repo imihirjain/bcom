@@ -38,7 +38,6 @@ const AdminMedia = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('Media uploaded:', response.data);
       fetchMediaFiles(); // Refresh the media files after upload
     } catch (error) {
       console.error('Error uploading media:', error);
@@ -51,7 +50,6 @@ const AdminMedia = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`https://bcom-backend.onrender.com/api/media/${id}`);
-      console.log('Media deleted');
       fetchMediaFiles(); // Refresh the media files after deletion
     } catch (error) {
       console.error('Error deleting media:', error);

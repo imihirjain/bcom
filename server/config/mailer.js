@@ -33,16 +33,13 @@ const sendOrderConfirmationEmail = async (userEmail, orderDetails) => {
   };
 
   // Log the mail options for debugging
-  console.log("Mail Options:", mailOptions);
 
   try {
     // Verify transporter configuration
     await transporter.verify();
-    console.log("Transporter verified. Ready to send email.");
 
     // Attempt to send the email
     await transporter.sendMail(mailOptions);
-    console.log('Order confirmation email sent successfully.');
   } catch (error) {
     // Log the error with more details
     console.error('Error sending email:', error.message);
