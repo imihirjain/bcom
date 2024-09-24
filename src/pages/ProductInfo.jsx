@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Footer from '../components/Footer';
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import Footer from "../components/Footer";
+import { ToastContainer, toast } from "react-toastify";
 
 const ProductInfo = () => {
   const { id, collectionId } = useParams(); // Get product ID and collection ID from the URL
@@ -9,14 +10,16 @@ const ProductInfo = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Index for current main image
   const [isCollectionProduct, setIsCollectionProduct] = useState(false);
   const [selectedSize, setSelectedSize] = useState(null); // Track selected size
-  const [categoryName, setCategoryName] = useState(''); // To store the fetched category name
-  const [collectionName, setCollectionName] = useState(''); // To store the fetched collection name
+  const [categoryName, setCategoryName] = useState(""); // To store the fetched category name
+  const [collectionName, setCollectionName] = useState(""); // To store the fetched collection name
   const [moreProducts, setMoreProducts] = useState([]); // State to store more products
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const productResponse = await fetch(`https://bcom-backend.onrender.com/api/products/${id}/products/${id}`);
+        const productResponse = await fetch(
+          `https://bcom-backend.onrender.com/api/products/${id}/products/${id}`
+        );
         if (productResponse.ok) {
           const productData = await productResponse.json();
           setProduct(productData);
@@ -27,9 +30,12 @@ const ProductInfo = () => {
             fetchMoreProductsByCategory(productData.category); // Fetch more products from the same category
           }
         } else {
-          const collectionProductResponse = await fetch(`https://bcom-backend.onrender.com/api/collection-products/${collectionId}/products/${id}`);
+          const collectionProductResponse = await fetch(
+            `https://bcom-backend.onrender.com/api/collection-products/${collectionId}/products/${id}`
+          );
           if (collectionProductResponse.ok) {
-            const collectionProductData = await collectionProductResponse.json();
+            const collectionProductData =
+              await collectionProductResponse.json();
             setProduct(collectionProductData);
             setCurrentImageIndex(0);
             setIsCollectionProduct(true);
@@ -42,13 +48,15 @@ const ProductInfo = () => {
           }
         }
       } catch (error) {
-        console.error('Error fetching product:', error);
+        console.error("Error fetching product:", error);
       }
     };
 
     const fetchCategoryName = async (categoryId) => {
       try {
-        const categoryResponse = await fetch(`https://bcom-backend.onrender.com/api/categories/${categoryId}`);
+        const categoryResponse = await fetch(
+          `https://bcom-backend.onrender.com/api/categories/${categoryId}`
+        );
         if (categoryResponse.ok) {
           const categoryData = await categoryResponse.json();
           setCategoryName(categoryData.name);
@@ -62,7 +70,9 @@ const ProductInfo = () => {
 
     const fetchCollectionName = async (collectionId) => {
       try {
-        const collectionResponse = await fetch(`https://bcom-backend.onrender.com/api/collections/${collectionId}`);
+        const collectionResponse = await fetch(
+          `https://bcom-backend.onrender.com/api/collections/${collectionId}`
+        );
         if (collectionResponse.ok) {
           const collectionData = await collectionResponse.json();
           setCollectionName(collectionData.name);
@@ -77,26 +87,30 @@ const ProductInfo = () => {
     // Fetch more products from the same category
     const fetchMoreProductsByCategory = async (categoryId) => {
       try {
-        const response = await fetch(`https://bcom-backend.onrender.com/api/categories/${categoryId}/products`);
+        const response = await fetch(
+          `https://bcom-backend.onrender.com/api/categories/${categoryId}/products`
+        );
         if (response.ok) {
           const data = await response.json();
           setMoreProducts(data.products);
         }
       } catch (error) {
-        console.error('Error fetching more category products:', error);
+        console.error("Error fetching more category products:", error);
       }
     };
 
     // Fetch more products from the same collection
     const fetchMoreProductsByCollection = async (collectionId) => {
       try {
-        const response = await fetch(`https://bcom-backend.onrender.com/api/collections/${collectionId}/products`);
+        const response = await fetch(
+          `https://bcom-backend.onrender.com/api/collections/${collectionId}/products`
+        );
         if (response.ok) {
           const data = await response.json();
           setMoreProducts(data.products);
         }
       } catch (error) {
-        console.error('Error fetching more collection products:', error);
+        console.error("Error fetching more collection products:", error);
       }
     };
 
@@ -115,9 +129,10 @@ const ProductInfo = () => {
 
   const handleAddToCart = () => {
     if (!selectedSize) {
-      alert("Please select a size before adding to cart!");
+      // alert("Please select a size before adding to cart!");
+      toast.error("Select the size");
       return;
-    }
+    } else toast.success("Item added to Cart");
 
     const cartItem = {
       id: product._id,
@@ -132,7 +147,9 @@ const ProductInfo = () => {
     };
 
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const productIndex = existingCart.findIndex(item => item.id === cartItem.id && item.size === selectedSize);
+    const productIndex = existingCart.findIndex(
+      (item) => item.id === cartItem.id && item.size === selectedSize
+    );
 
     if (productIndex >= 0) {
       existingCart[productIndex].quantity += quantity;
@@ -141,7 +158,7 @@ const ProductInfo = () => {
     }
 
     localStorage.setItem("cart", JSON.stringify(existingCart));
-    console.log(`${quantity} of ${product.name} (Size: ${selectedSize}) added to cart`);
+    
   };
 
   const handleThumbnailClick = (index) => {
@@ -149,11 +166,15 @@ const ProductInfo = () => {
   };
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % product.images.length);
+    setCurrentImageIndex(
+      (prevIndex) => (prevIndex + 1) % product.images.length
+    );
   };
 
   const handlePrevImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? product.images.length - 1 : prevIndex - 1));
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? product.images.length - 1 : prevIndex - 1
+    );
   };
 
   const handleSizeSelection = (size) => {
@@ -164,11 +185,15 @@ const ProductInfo = () => {
 
   return (
     <>
-      <div className="container mx-auto p-5 mt-24 overflow-x-hidden">
+      <ToastContainer position="top-center" />
+      <div className="container mx-auto p-5 mt-24 overflow-x-hidden font-indif">
         <div className="flex flex-col md:flex-row gap-10">
           <div className="w-full md:w-1/2 relative md:ml-[100px]">
             <img
-              src={product.images[currentImageIndex] || 'https://via.placeholder.com/400'}
+              src={
+                product.images[currentImageIndex] ||
+                "https://via.placeholder.com/400"
+              }
               alt={product.name}
               className="w-full h-auto"
             />
@@ -186,7 +211,11 @@ const ProductInfo = () => {
                     key={index}
                     src={image}
                     alt={`Product Thumbnail ${index + 1}`}
-                    className={`w-20 h-20 rounded-lg cursor-pointer border-2 ${currentImageIndex === index ? 'border-blue-500' : 'border-transparent'}`}
+                    className={`w-20 h-20 rounded-lg cursor-pointer border-2 ${
+                      currentImageIndex === index
+                        ? "border-blue-500"
+                        : "border-transparent"
+                    }`}
                     onClick={() => handleThumbnailClick(index)}
                   />
                 ))}
@@ -194,36 +223,69 @@ const ProductInfo = () => {
           </div>
 
           <div className="w-full md:w-1/2">
-            <h1 className="text-3xl font-serif mb-4">{product.name}</h1>
-            <p className="text-xl font-serif text-gray-400 mb-4">Price: ₹{product.price}</p>
-            <div className='h-[1px] md:w-3/4 bg-slate-400'></div>
+            <h1 className="text-3xl font-indif mb-4">{product.name}</h1>
+            <p className="text-xl font-serif text-gray-400 mb-4">
+              Price: ₹{product.price}
+            </p>
+            <div className="h-[1px] md:w-3/4 bg-slate-400"></div>
 
             <div>
-              <h2 className='font-serif text-lg text-gray-400 mb-2'>Size</h2>
-              {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((size) => (
+              <h2 className="font-gara text-2xl text-gray-400 mb-2 mt-2">
+                Size
+              </h2>
+              {["XS", "S", "M", "L", "XL", "XXL"].map((size) => (
                 <button
                   key={size}
-                  className={`px-4 py-2 border-[1px] rounded-md border-black ml-4 ${selectedSize === size ? 'bg-black text-white' : 'bg-white text-black'}`}
+                  className={`px-4 py-2 border-[1px] font-gara rounded-md border-black ml-4 ${
+                    selectedSize === size
+                      ? "bg-black text-white"
+                      : "bg-white text-black"
+                  }`}
                   onClick={() => handleSizeSelection(size)}
                 >
                   {size}
                 </button>
               ))}
+              <div className="mt-4">
+                <Link
+                  to="/size"
+                  className="font-gara text-xl hover:underline text-blue-700"
+                >
+                  Size Chart
+                </Link>
+              </div>
             </div>
-            <p className="text-gray-700 mb-4 mt-2">
-              {isCollectionProduct ? `Collection: ${collectionName}` : `Category: ${categoryName}`}
+
+            <p className="text-gray-700 mb-4 mt-2 text-xl font-gara">
+              {isCollectionProduct
+                ? `Collection: ${collectionName}`
+                : `Category: ${categoryName}`}
             </p>
-            <p className="text-gray-600 mb-6">{product.description}</p>
+            <p className="text-gray-600 mb-6 font-gara">
+              {product.description}
+            </p>
 
             <div className="flex items-center mb-6">
-              <button onClick={handleDecrement} className="px-4 py-2 bg-gray-200 border-[1px] rounded-sm border-black">-</button>
-              <span className="px-4 py-2 border-1 rounded-sm ml-4 border-black">{quantity}</span>
-              <button onClick={handleIncrement} className="px-4 py-2 ml-4 bg-gray-200 border-[1px] rounded-sm border-black">+</button>
+              <button
+                onClick={handleDecrement}
+                className="px-4 py-2 bg-gray-200 border-[1px] rounded-sm border-black"
+              >
+                -
+              </button>
+              <span className="px-4 py-2 border-1 rounded-sm ml-4 border-black font-gara">
+                {quantity}
+              </span>
+              <button
+                onClick={handleIncrement}
+                className="px-4 py-2 ml-4 bg-gray-200 border-[1px] rounded-sm border-black"
+              >
+                +
+              </button>
             </div>
 
             <button
               onClick={handleAddToCart}
-              className="bg-white text-[#4c4c4b] border-[1px] w-3/4 border-black py-3 px-6 rounded-lg hover:bg-[#4c4c4b] hover:text-white transition duration-300 mt-4"
+              className="bg-white text-[#4c4c4b] border-[1px] w-3/4 border-black py-3 px-6 rounded-lg hover:bg-[#4c4c4b] hover:text-white transition duration-300 mt-4 font-gara"
             >
               Add to Cart
             </button>
@@ -237,7 +299,10 @@ const ProductInfo = () => {
             {moreProducts.map((relatedProduct) => (
               <div key={relatedProduct._id} className="border p-4 rounded-lg">
                 <img
-                  src={relatedProduct.images[0] || 'https://via.placeholder.com/200'}
+                  src={
+                    relatedProduct.images[0] ||
+                    "https://via.placeholder.com/200"
+                  }
                   alt={relatedProduct.name}
                   className="w-full h-48 object-cover mb-4"
                 />

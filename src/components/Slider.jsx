@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Slider = () => {
   const [slides, setSlides] = useState([]);
@@ -9,10 +9,12 @@ const Slider = () => {
   useEffect(() => {
     const fetchSlides = async () => {
       try {
-        const response = await axios.get('https://bcom-backend.onrender.com/api/media/all');
+        const response = await axios.get(
+          "https://bcom-backend.onrender.com/api/media/all"
+        );
         setSlides(response.data);
       } catch (error) {
-        console.error('Error fetching media:', error);
+        console.error("Error fetching media:", error);
       }
     };
 
@@ -55,12 +57,12 @@ const Slider = () => {
       >
         {slides.map((slide, index) => (
           <div key={index} className="w-full h-full flex-shrink-0">
-            {slide.type === 'image' ? (
+            {slide.type === "image" ? (
               <img
                 src={slide.url}
                 alt={`Slide ${index}`}
                 className={`w-full h-full object-contain transition-all duration-700 ${
-                  isTransitioning ? 'scale-110 blur-sm' : 'scale-100 blur-0'
+                  isTransitioning ? "scale-110 blur-sm" : "scale-100 blur-0"
                 }`}
               />
             ) : (
@@ -71,7 +73,7 @@ const Slider = () => {
                 loop
                 controls
                 className={`w-full h-full object-contain transition-all duration-700 ${
-                  isTransitioning ? 'scale-110 blur-sm' : 'scale-100 blur-0'
+                  isTransitioning ? "scale-110 blur-sm" : "scale-100 blur-0"
                 }`}
               />
             )}
@@ -79,11 +81,17 @@ const Slider = () => {
         ))}
       </div>
 
-      <button onClick={prevSlide} className="absolute top-1/2 left-2 transform -translate-y-1/2 p-2 text-white opacity-75 hover:opacity-100 bg-gray-700 rounded-full">
+      <button
+        onClick={prevSlide}
+        className="absolute top-1/2 left-2 transform -translate-y-1/2 p-2 text-white opacity-75 hover:opacity-100 bg-gray-700 rounded-full"
+      >
         &#10094;
       </button>
 
-      <button onClick={nextSlide} className="absolute top-1/2 right-2 transform -translate-y-1/2 p-2 text-white opacity-75 hover:opacity-100 bg-gray-700 rounded-full">
+      <button
+        onClick={nextSlide}
+        className="absolute top-1/2 right-2 transform -translate-y-1/2 p-2 text-white opacity-75 hover:opacity-100 bg-gray-700 rounded-full"
+      >
         &#10095;
       </button>
 
@@ -92,7 +100,9 @@ const Slider = () => {
           <div
             key={index}
             onClick={() => setCurrentIndex(index)}
-            className={`cursor-pointer w-3 h-3 bg-white rounded-full transition-all ${currentIndex === index ? 'bg-blue-500' : 'bg-gray-300'}`}
+            className={`cursor-pointer w-3 h-3 bg-white rounded-full transition-all ${
+              currentIndex === index ? "bg-blue-500" : "bg-gray-300"
+            }`}
           ></div>
         ))}
       </div>

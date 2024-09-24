@@ -28,6 +28,7 @@ import Shipping from "./pages/Shipping";
 import Refund from "./pages/Refund";
 import Faq from "./pages/Faq";
 import AdminMedia from "./admin/component/AdminMedia";
+import Size from "./pages/Size";
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
         <Route path="/shipping-policy" element={<Shipping />} />
         <Route path="/refund-policy" element={<Refund />} />
         <Route path="/faq" element={<Faq />} />
+        <Route path="/size" element={<Size />} />
         <Route path="/collection/:id" element={<CollectionProducts />} />
 
         {/* Admin Routes */}
@@ -81,7 +83,7 @@ function App() {
           <Route path="all-orders" element={<AllOrders />} />
           <Route path="video-upload" element={<VideoUpload />} />
           <Route path="orders" element={<AllOrders />} />
-          <Route path="media" element={<AdminMedia/>} />
+          <Route path="media" element={<AdminMedia />} />
         </Route>
       </Routes>
     </div>

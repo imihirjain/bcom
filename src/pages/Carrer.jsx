@@ -8,8 +8,8 @@ const Career = () => {
     email: "",
     department: "",
     jobType: [],
-    resume: null,
-    portfolio: null,
+    resumeLink: "",
+    portfolioLink: "",
   });
 
   const handleInputChange = (e) => {
@@ -17,14 +17,6 @@ const Career = () => {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-    }));
-  };
-
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: files[0],
     }));
   };
 
@@ -40,8 +32,23 @@ const Career = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Logic for form submission
-    console.log(formData);
+
+    const subject = encodeURIComponent("New Career Application");
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\n
+       Contact: ${formData.contact}\n
+       Email: ${formData.email}\n
+       Department: ${formData.department}\n
+       Job Type: ${formData.jobType.join(", ")}\n
+       Resume Link: ${formData.resumeLink}\n
+       Portfolio Link: ${formData.portfolioLink}`
+    );
+
+    // Construct the mailto link
+    const mailtoLink = `mailto:jmanav251@gmail.com?subject=${subject}&body=${body}`;
+
+    // Open the mail client with the prefilled data
+    window.location.href = mailtoLink;
   };
 
   return (
@@ -137,29 +144,33 @@ const Career = () => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="resume" className="block text-left text-gray-700">
-            Attach Resume
+          <label htmlFor="resumeLink" className="block text-left text-gray-700">
+            Resume Link (Google Drive or other link)
           </label>
           <input
-            type="file"
-            name="resume"
-            id="resume"
+            type="url"
+            name="resumeLink"
+            id="resumeLink"
             className="w-full p-2 border rounded-md"
-            onChange={handleFileChange}
+            value={formData.resumeLink}
+            onChange={handleInputChange}
           />
         </div>
 
         <div className="mb-4">
-          <label htmlFor="portfolio" className="block text-left text-gray-700">
-            Portfolio
+          <label
+            htmlFor="portfolioLink"
+            className="block text-left text-gray-700"
+          >
+            Portfolio Link (Google Drive or other link)
           </label>
           <input
-            type="file"
-            name="portfolio"
-            id="portfolio"
+            type="url"
+            name="portfolioLink"
+            id="portfolioLink"
             className="w-full p-2 border rounded-md"
-            onChange={handleFileChange}
-            multiple
+            value={formData.portfolioLink}
+            onChange={handleInputChange}
           />
         </div>
 

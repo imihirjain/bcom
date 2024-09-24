@@ -184,24 +184,6 @@ const Navbar = () => {
                   </li>
                   <li className="relative group">
                     <Link
-                      to="/about"
-                      className="hover:border-b-2 hover:border-black font-indif"
-                    >
-                      About
-                    </Link>
-                    <div className="absolute left-0 top-full bg-white shadow-lg hidden group-hover:block">
-                      <ul className="p-5">
-                        <li className="hover:bg-gray-100 px-3 py-2 font-indif">
-                          <Link to="#founder">Founder</Link>
-                        </li>
-                        <li className="hover:bg-gray-100 px-3 py-2 font-indif">
-                          <Link to="#legacy">Legacy</Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li className="relative group">
-                    <Link
                       to=""
                       className="hover:border-b-2 hover:border-black font-indif"
                     >
@@ -251,6 +233,24 @@ const Navbar = () => {
                       </div>
                     </div>
                   </li>
+                  <li className="relative group">
+                    <Link
+                      to="/about"
+                      className="hover:border-b-2 hover:border-black font-indif"
+                    >
+                      About
+                    </Link>
+                    <div className="absolute left-0 top-full bg-white shadow-lg hidden group-hover:block">
+                      <ul className="p-5">
+                        <li className="hover:bg-gray-100 px-3 py-2 font-indif">
+                          <Link to="#founder">Founder</Link>
+                        </li>
+                        <li className="hover:bg-gray-100 px-3 py-2 font-indif">
+                          <Link to="#legacy">Legacy</Link>
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
 
                   <li>
                     <Link
@@ -258,6 +258,15 @@ const Navbar = () => {
                       className="hover:border-b-2 hover:border-black font-indif"
                     >
                       Contact
+                    </Link>
+                  </li>
+                  <li className="hover:bg-gray-100 px-3 py-2 font-indif">
+                    <Link
+                      to="http://heeteshshah.com/"
+                      onClick={toggleMenu}
+                      target="_blank"
+                    >
+                      Heetesh Shah
                     </Link>
                   </li>
                 </ul>
@@ -368,12 +377,6 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className="hover:bg-gray-100 px-3 py-2 font-indif">
-                  <Link to="/about" onClick={toggleMenu}>
-                    About
-                  </Link>
-                </li>
-
-                <li className="hover:bg-gray-100 px-3 py-2 font-indif">
                   <Link to="" onClick={toggleMenu}>
                     Shop
                   </Link>
@@ -439,6 +442,11 @@ const Navbar = () => {
                       </ul>
                     )}
                   </ul>
+                </li>
+                <li className="hover:bg-gray-100 px-3 py-2 font-indif">
+                  <Link to="/about" onClick={toggleMenu}>
+                    About
+                  </Link>
                 </li>
 
                 <li className="hover:bg-gray-100 px-3 py-2 font-indif">

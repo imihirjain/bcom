@@ -8,22 +8,23 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-100 py-8 px-4 mt-[150px]">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+    <footer className="bg-gray-100 py-8 px-4 mt-[100px]">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-sm sm:text-base">
         {/* Customer Care Section */}
         <div className="text-left">
-          <h4 className="font-indif font-bold text-2xl">CUSTOMER CARE</h4>
-          <p className="mt-2 font-gara font-medium text-xl">
+          <h4 className="font-indif font-bold text-lg sm:text-2xl">
+            CUSTOMER CARE
+          </h4>
+          <p className="mt-2 font-gara font-medium text-base sm:text-xl">
             Our online customer care team is available Monday through Saturday,
             10AM – 6PM IST. We are closed on weekends and national holidays.
             Please contact us, we would be happy to assist you.
           </p>
           <p className="mt-2 flex items-center gap-2">
-            {" "}
-            <FaPhone className="mt-2" />{" "}
+            <FaPhone className="mt-1" />{" "}
             <a
               href="tel:+918700033744"
-              className="text-gray-700 font-indif font-bold text-lg"
+              className="text-gray-700 font-indif font-bold text-base sm:text-lg"
             >
               +91 899-9999-999
             </a>
@@ -31,25 +32,19 @@ const Footer = () => {
           <p className="flex items-center gap-2 mt-2">
             <FaEnvelope />{" "}
             <a
-              href="mailto:info@angadsinghofficial.com"
-              className="text-gray-700 font-indif font-bold text-lg"
+              href="mailto:info@xyz.com"
+              className="text-gray-700 font-indif font-bold text-base sm:text-lg"
             >
               info@xyz.com
             </a>
           </p>
-          {/* Social Media */}
-          <div className="mt-4">
-            <a
-              href="https://www.instagram.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            ></a>
-          </div>
         </div>
 
         {/* Quick Links Section */}
         <div className="text-left">
-          <h4 className="font-indif font-bold text-lg">QUICK LINKS</h4>
+          <h4 className="font-indif font-bold text-lg sm:text-2xl">
+            QUICK LINKS
+          </h4>
           <ul className="mt-2 space-y-2">
             <li>
               <a
@@ -59,7 +54,6 @@ const Footer = () => {
                 About Us
               </a>
             </li>
-
             <li>
               <a
                 href="/shipping-policy"
@@ -97,7 +91,9 @@ const Footer = () => {
 
         {/* Newsletter Section */}
         <div className="text-left">
-          <h4 className="font-indif font-semibold text-lg">NEWSLETTER</h4>
+          <h4 className="font-indif font-bold text-lg sm:text-2xl">
+            NEWSLETTER
+          </h4>
           <p className="mt-2 font-gara font-semibold">
             Sign up for exclusive offers, original stories, events and more.
           </p>
@@ -115,22 +111,12 @@ const Footer = () => {
       </div>
 
       {/* Footer Bottom */}
-      <div className="container mx-auto mt-8 text-center text-lg border-t pt-4 text-gray-500 font-indif font-semibold">
+      <div className="container mx-auto mt-8 text-center text-sm sm:text-lg border-t pt-4 text-gray-500 font-indif font-semibold">
         <p>© 2024 xyz.com. Managed by Growify Digital</p>
-        <ul className="flex justify-center space-x-4 mt-4">
+        <ul className="flex flex-wrap justify-center space-x-2 sm:space-x-4 mt-4">
           <li>
             <a href="/about-us" className="hover:underline">
               About Us
-            </a>
-          </li>
-          <li>
-            <a href="/shipping-policy" className="hover:underline">
-              Shipping Policy
-            </a>
-          </li>
-          <li>
-            <a href="/carrer" className="hover:underline">
-              Carrer
             </a>
           </li>
           <li>
@@ -149,6 +135,11 @@ const Footer = () => {
             </a>
           </li>
           <li>
+            <a href="/carrer" className="hover:underline">
+              Career
+            </a>
+          </li>
+          <li>
             <a href="/shipping-policy" className="hover:underline">
               Shipping Policy
             </a>
@@ -161,6 +152,11 @@ const Footer = () => {
           <li>
             <a href="/faq" className="hover:underline">
               FAQ's
+            </a>
+          </li>
+          <li>
+            <a href="/size" className="hover:underline">
+              Size
             </a>
           </li>
         </ul>

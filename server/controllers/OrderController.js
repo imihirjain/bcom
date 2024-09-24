@@ -6,16 +6,13 @@ const { sendOrderConfirmationEmail } = require('../config/mailer');
 exports.createOrder = async (req, res) => {
   try {
     // Log the entire request body to check if it is being received correctly
-    console.log("Request Body:", req.body);
 
     const { cartItems, totalPrice, paymentData, userDetails } = req.body;
 
     // Log the userDetails to ensure they're present
-    console.log("User Details:", userDetails);
 
     // Check for missing user details and return early if any are missing
     if (!userDetails || !userDetails.name || !userDetails.phone || !userDetails.email || !userDetails.address) {
-      console.log("User details are missing or incomplete:", userDetails);
       return res.status(400).json({ message: 'User details are missing or incomplete.' });
     }
 
@@ -29,16 +26,12 @@ exports.createOrder = async (req, res) => {
     });
 
     // Log new order details before saving
-    console.log("New Order Details:", newOrder);
 
     // Save the order in the database and log the result
     const savedOrder = await newOrder.save();
-    console.log("Order created successfully:", savedOrder);
 
     // Send order confirmation email and log the attempt
-    console.log("Attempting to send order confirmation email to:", userDetails.email);
     await sendOrderConfirmationEmail(userDetails.email, savedOrder);
-    console.log("Order confirmation email sent successfully.");
 
     // Return the response with the saved order
     return res.status(201).json({
@@ -66,7 +59,6 @@ exports.updateOrderStatus = async (req, res) => {
     const payment = await Payment.findOne({ orderId: razorpay_order_id });
     
     if (!payment) {
-      console.log("Payment not found for order ID:", razorpay_order_id);
       return res.status(404).json({ message: 'Payment not found' });
     }
 
@@ -74,21 +66,18 @@ exports.updateOrderStatus = async (req, res) => {
     if (payment.status === 'Success') {
       const order = await Order.findById(payment.orderId);
       if (!order) {
-        console.log("Order not found for payment:", payment);
         return res.status(404).json({ message: 'Order not found' });
       }
 
       order.status = 'Completed';
       await order.save();
 
-      console.log("Order updated to Completed:", order);
 
       // Send order confirmation email after payment success
       await sendOrderConfirmationEmail(order.userDetails.email, order);
 
       res.status(200).json({ message: 'Order updated successfully', order });
     } else {
-      console.log("Payment not successful for order ID:", razorpay_order_id);
       res.status(400).json({ message: 'Payment is not successful, order status cannot be updated' });
     }
   } catch (error) {
@@ -105,7 +94,6 @@ exports.getOrderById = async (req, res) => {
     const order = await Order.findById(orderId);
 
     if (!order) {
-      console.log("Order not found for ID:", orderId);
       return res.status(404).json({ message: 'Order not found' });
     }
 
@@ -120,7 +108,6 @@ exports.getOrderById = async (req, res) => {
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find();
-    console.log("Fetched all orders:", orders);
     res.status(200).json(orders);
   } catch (error) {
     console.error("Error fetching orders:", error.message);
