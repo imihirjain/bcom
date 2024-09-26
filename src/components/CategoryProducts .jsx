@@ -4,13 +4,13 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Footer from "./Footer";
 
 const CategoryProducts = () => {
-  const { id } = useParams(); // Category ID from the URL
-  const [products, setProducts] = useState([]); // State for storing products
-  const [filteredProducts, setFilteredProducts] = useState([]); // State for filtered products
-  const [categoryName, setCategoryName] = useState(""); // State for category name
-  const [error, setError] = useState(null); // State for error handling
-  const [loading, setLoading] = useState(true); // State for loading status
-  const [sortOption, setSortOption] = useState(""); // State for sorting option
+  const { id } = useParams(); 
+  const [products, setProducts] = useState([]); 
+  const [filteredProducts, setFilteredProducts] = useState([]); 
+  const [categoryName, setCategoryName] = useState(""); 
+  const [error, setError] = useState(null); 
+  const [loading, setLoading] = useState(true); 
+  const [sortOption, setSortOption] = useState(""); 
 
   useEffect(() => {
     const fetchCategoryAndProducts = async () => {
@@ -21,7 +21,6 @@ const CategoryProducts = () => {
       }
 
       try {
-        // Fetch Category Details
         const categoryResponse = await fetch(
           `https://bcom-backend.onrender.com/api/categories/${id}`
         );
@@ -29,7 +28,7 @@ const CategoryProducts = () => {
           throw new Error("Failed to fetch category details");
         }
         const categoryData = await categoryResponse.json();
-        setCategoryName(categoryData.name); // Assuming the category data has a "name" field
+        setCategoryName(categoryData.name); 
 
         // Fetch Products for the Category
         const productsResponse = await fetch(
@@ -39,42 +38,40 @@ const CategoryProducts = () => {
           throw new Error("Failed to fetch products");
         }
         const productsData = await productsResponse.json();
-        setProducts(productsData); // Set products from API response
-        setFilteredProducts(productsData); // Initialize filtered products
+        setProducts(productsData); 
+        setFilteredProducts(productsData); 
       } catch (error) {
         setError("Failed to fetch products");
         console.error("Error fetching category products:", error);
       } finally {
-        setLoading(false); // Stop loading after fetching is complete
+        setLoading(false); 
       }
     };
 
     fetchCategoryAndProducts();
   }, [id]);
 
-  // Function to handle sorting
   const handleSort = (option) => {
     let sortedProducts = [...products];
 
     if (option === "atoz") {
-      sortedProducts.sort((a, b) => a.name.localeCompare(b.name)); // Sort A to Z by name
+      sortedProducts.sort((a, b) => a.name.localeCompare(b.name)); 
     } else if (option === "ztoa") {
-      sortedProducts.sort((a, b) => b.name.localeCompare(a.name)); // Sort Z to A by name
+      sortedProducts.sort((a, b) => b.name.localeCompare(a.name)); 
     } else if (option === "newtoold") {
       sortedProducts.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       ); // Sort New to Old
     } else if (option === "prizehightolow") {
-      sortedProducts.sort((a, b) => b.price - a.price); // Sort Price High to Low
+      sortedProducts.sort((a, b) => b.price - a.price); 
     } else if (option === "prizelowtohigh") {
-      sortedProducts.sort((a, b) => a.price - b.price); // Sort Price Low to High
+      sortedProducts.sort((a, b) => a.price - b.price); 
     }
 
-    setFilteredProducts(sortedProducts); // Update the filtered products state with sorted list
-    setSortOption(option); // Update the selected sort option
+    setFilteredProducts(sortedProducts); 
+    setSortOption(option); 
   };
 
-  // Render loading, error, or product grid
   return (
     <>
       <div className="mt-24 font-indif font-semibold">

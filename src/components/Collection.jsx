@@ -21,14 +21,13 @@ const Collection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const visibleImages = 3;
 
-  // Fetch the collections data from the API
   useEffect(() => {
     const fetchCollections = async () => {
       try {
         const response = await axios.get(
           "https://bcom-backend.onrender.com/api/collections"
         );
-        setCollections(response.data); // Assuming the API returns an array of collections
+        setCollections(response.data);
       } catch (error) {
         console.error("Error fetching collections:", error);
       }
@@ -63,7 +62,7 @@ const Collection = () => {
       {/* Introduction Section with Arrows */}
       <div className="flex items-center justify-center w-full max-w-6xl mb-2">
         <button
-          className="text-2xl font-bold text-gray-700 bg-white p-2 mr-4 mb-2"
+          className="text-2xl font-bold text-gray-700 bg-white p-2 mr-1 mb-2"
           onClick={prevSlide}
         >
           &lt;
@@ -72,7 +71,7 @@ const Collection = () => {
           Collection
         </h1>
         <button
-          className="text-2xl font-bold text-gray-700 bg-white p-2 mb-1 ml-4"
+          className="text-2xl font-bold text-gray-700 bg-white p-2 mb-1 ml-1"
           onClick={nextSlide}
         >
           &gt;
@@ -102,8 +101,8 @@ const Collection = () => {
                   alt={collection.name}
                   className="w-full h-[300px] sm:h-[400px] lg:h-[600px] object-cover cursor-pointer"
                 />
-                <div className="text-center mt-2">
-                  <h2 className="text-lg sm:text-2xl font-bold font-indif cursor-pointer">
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center p-6">
+                  <h2 className="text-white lg:text-3xl text-2xl font-semibold font-indif cursor-pointer uppercase text-center mt-44 lg:mt-96 hover:underline ">
                     {collection.name}
                   </h2>
                   <p className="text-gray-500 font-gara font-semibold">

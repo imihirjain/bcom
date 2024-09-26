@@ -50,7 +50,7 @@ const Slider = () => {
   }, [currentIndex]);
 
   return (
-    <div className="w-full max-h-[400px] sm:max-h-[500px] md:max-h-[600px] lg:max-h-[80vh] relative overflow-hidden">
+    <div className="w-screen h-screen relative overflow-hidden">
       <div
         className="w-full h-full flex transition-transform duration-700 ease-in-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -71,7 +71,7 @@ const Slider = () => {
                 autoPlay
                 muted
                 loop
-                controls
+                // controls
                 className={`w-full h-full object-contain transition-all duration-700 ${
                   isTransitioning ? "scale-110 blur-sm" : "scale-100 blur-0"
                 }`}
@@ -80,20 +80,6 @@ const Slider = () => {
           </div>
         ))}
       </div>
-
-      <button
-        onClick={prevSlide}
-        className="absolute top-1/2 left-2 transform -translate-y-1/2 p-2 text-white opacity-75 hover:opacity-100 bg-gray-700 rounded-full"
-      >
-        &#10094;
-      </button>
-
-      <button
-        onClick={nextSlide}
-        className="absolute top-1/2 right-2 transform -translate-y-1/2 p-2 text-white opacity-75 hover:opacity-100 bg-gray-700 rounded-full"
-      >
-        &#10095;
-      </button>
 
       <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
         {slides.map((_, index) => (

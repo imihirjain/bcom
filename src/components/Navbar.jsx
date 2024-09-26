@@ -3,29 +3,30 @@ import {
   faSearch,
   faTimes,
   faBars,
+  faBagShopping,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom"; // Import useLocation
-import Slider from "./Slider"; // Import Slider component
+import { Link, useLocation } from "react-router-dom";
+import Slider from "./Slider";
 import logo from "../assets/HS&DV/DVW.png";
 import hoverLogo from "../assets/DV.PNG";
+import VideoHome from "./VideoHome";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isHovered, setIsHovered] = useState(false); // State for navbar hover
+  const [isHovered, setIsHovered] = useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
-  const [showMenu, setShowMenu] = useState(false); // Mobile menu state
+  const [showMenu, setShowMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState([]);
   const [collections, setCollections] = useState([]);
-  const [cartCount, setCartCount] = useState(0); // Track cart item count
-  const searchBarRef = useRef(null); // Ref for search bar
-  const menuRef = useRef(null); // Ref for mobile menu
-  const [showCategories, setShowCategories] = useState(false); // State for categories toggle
+  const [cartCount, setCartCount] = useState(0);
+  const searchBarRef = useRef(null);
+  const menuRef = useRef(null);
+  const [showCategories, setShowCategories] = useState(false);
   const [showCollections, setShowCollections] = useState(false);
 
-  // Get the current location (current route)
   const location = useLocation();
 
   useEffect(() => {
@@ -45,19 +46,18 @@ const Navbar = () => {
         setShowSearchBar(false);
       }
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setShowMenu(false); // Close menu if clicked outside
+        setShowMenu(false);
       }
     };
 
     window.addEventListener("scroll", handleScroll);
-    document.addEventListener("mousedown", handleClickOutside); // Detect clicks outside search bar and menu
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  // Fetch categories and collections from API
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -87,12 +87,11 @@ const Navbar = () => {
     fetchCollections();
   }, []);
 
-  // Update cart count from local storage
   useEffect(() => {
     const cartData = JSON.parse(localStorage.getItem("cart")) || [];
     const totalItems = cartData.reduce((acc, item) => acc + item.quantity, 0);
     setCartCount(totalItems);
-  }, [cartCount]); // Recalculate when cart changes
+  }, [cartCount]);
 
   const handleSearchClick = () => {
     setShowSearchBar(!showSearchBar);
@@ -107,28 +106,28 @@ const Navbar = () => {
   };
 
   const handleMouseEnter = () => {
-    setIsHovered(true); // Set hover state to true
+    setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false); // Reset hover state
+    setIsHovered(false);
   };
 
   const toggleCategories = () => {
     setShowCategories(!showCategories);
   };
 
-  // Toggle the visibility for Collections
   const toggleCollections = () => {
     setShowCollections(!showCollections);
   };
   return (
     <>
       <div className="relative w-full overflow-x-hidden font-semibold font-indif">
-        {/* Only render the Slider on the Home page (path === "/") */}
+        {/* slider "/" */}
         {location.pathname === "/" ? (
           <div className="">
-            <Slider />
+            <VideoHome />
+            {/* <Slider /> */}
           </div>
         ) : (
           <div className="h-0"></div> // Add a class with no height on non-home pages to avoid empty space
@@ -159,7 +158,7 @@ const Navbar = () => {
                       : isScrolled
                       ? "text-black"
                       : "text-white"
-                  }`} // Change to black if menu is open or on other pages
+                  }`}
                   onClick={toggleMenu}
                   onMouseEnter={() => setIsHovered(true)} // Set hover state to true on mouse enter
                   onMouseLeave={() => setIsHovered(false)} // Set hover state to false on mouse leave
@@ -177,7 +176,7 @@ const Navbar = () => {
                   <li>
                     <Link
                       to="/"
-                      className="hover:border-b-2 hover:border-black font-indif"
+                      className="hover:border-b-2 hover:border-black font-indif uppercase"
                     >
                       Home
                     </Link>
@@ -185,7 +184,7 @@ const Navbar = () => {
                   <li className="relative group">
                     <Link
                       to=""
-                      className="hover:border-b-2 hover:border-black font-indif"
+                      className="hover:border-b-2 hover:border-black font-indif uppercase"
                     >
                       Shop
                     </Link>
@@ -236,7 +235,7 @@ const Navbar = () => {
                   <li className="relative group">
                     <Link
                       to="/about"
-                      className="hover:border-b-2 hover:border-black font-indif"
+                      className="hover:border-b-2 hover:border-black font-indif uppercase"
                     >
                       About
                     </Link>
@@ -255,12 +254,12 @@ const Navbar = () => {
                   <li>
                     <Link
                       to="/contact"
-                      className="hover:border-b-2 hover:border-black font-indif"
+                      className="hover:border-b-2 hover:border-black font-indif uppercase"
                     >
                       Contact
                     </Link>
                   </li>
-                  <li className="hover:bg-gray-100 px-3 py-2 font-indif">
+                  <li className="hover:bg-gray-100 px-3 py-2 font-indif uppercase">
                     <Link
                       to="https://heetesh-shah.vercel.app/"
                       onClick={toggleMenu}
@@ -282,7 +281,7 @@ const Navbar = () => {
                           : hoverLogo
                       }
                       alt="Logo"
-                      className="h-[200px] w-[200px] lg:text-center lg:ml-80  transition-opacity duration-300"
+                      className="h-[200px] w-[200px] lg:ml-32 transition-opacity duration-300"
                     />
                   </Link>
                 </div>
@@ -295,7 +294,9 @@ const Navbar = () => {
                         onClick={handleSearchClick}
                         className="hover:border-b-2 font-indif hover:border-black cursor-pointer"
                       >
-                        <span className="hidden lg:block">Search</span>
+                        <span className="hidden uppercase lg:block">
+                          Search
+                        </span>
                       </a>
                       <FontAwesomeIcon
                         icon={faSearch}
@@ -310,7 +311,7 @@ const Navbar = () => {
                         to="/cart"
                         className="hover:border-b-2 relative hover:border-black font-indif"
                       >
-                        <span className="hidden lg:block">Cart</span>
+                        <span className="hidden uppercase lg:block">Bag</span>
                         {cartCount > 0 && (
                           <span className="lg:ml-14 ml-5 bottom-3 bg-red-500 absolute rounded-full px-2 text-md text-white">
                             {cartCount}
@@ -319,7 +320,7 @@ const Navbar = () => {
                       </Link>
                       <Link to="/cart">
                         <FontAwesomeIcon
-                          icon={faCartArrowDown}
+                          icon={faBagShopping}
                           className="ml-2 text-xl cursor-pointer"
                         />
                       </Link>
@@ -343,7 +344,7 @@ const Navbar = () => {
                 className="border h-[50px] mt-5 ml-5 rounded-md border-gray-300 p-1 w-[580px]"
                 placeholder="Search products..."
               />
-              <button className="ml-2  h-[50px] mt-5 rounded-md px-4 bg-[#cdac99] text-black font-indif ">
+              <button className="ml-2  h-[50px] mt-5  rounded-md px-4 bg-[#cdac99] text-black font-indif ">
                 Search
               </button>
               <FontAwesomeIcon
@@ -371,12 +372,12 @@ const Navbar = () => {
                 <h1 className="mt-10">Menu</h1>
               </div>
               <ul className="mt-5">
-                <li className="hover:bg-gray-100 px-3 py-2 font-indif">
+                <li className="hover:bg-gray-100 px-3 py-2 font-indif uppercase">
                   <Link to="/" onClick={toggleMenu}>
                     Home
                   </Link>
                 </li>
-                <li className="hover:bg-gray-100 px-3 py-2 font-indif">
+                <li className="hover:bg-gray-100 px-3 py-2 font-indif uppercase">
                   <Link to="" onClick={toggleMenu}>
                     Shop
                   </Link>
@@ -443,18 +444,18 @@ const Navbar = () => {
                     )}
                   </ul>
                 </li>
-                <li className="hover:bg-gray-100 px-3 py-2 font-indif">
+                <li className="hover:bg-gray-100 px-3 py-2 font-indif uppercase">
                   <Link to="/about" onClick={toggleMenu}>
                     About
                   </Link>
                 </li>
 
-                <li className="hover:bg-gray-100 px-3 py-2 font-indif">
+                <li className="hover:bg-gray-100 px-3 py-2 font-indif uppercase">
                   <Link to="/contact" onClick={toggleMenu}>
                     Contact
                   </Link>
                 </li>
-                <li className="hover:bg-gray-100 px-3 py-2 font-indif">
+                <li className="hover:bg-gray-100 px-3 py-2 font-indif uppercase">
                   <Link
                     to="https://heetesh-shah.vercel.app/"
                     onClick={toggleMenu}
