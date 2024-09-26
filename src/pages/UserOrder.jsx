@@ -9,26 +9,20 @@ const UserOrder = () => {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const token = localStorage.getItem("token"); // Assuming the token is stored in localStorage
         const response = await fetch(
-          `https://bcom-backend.onrender.com/api/orders/${id}`, // Fetch the order by its ID
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Pass the token for authenticated requests
-            },
-          }
+          `https://bcom-backend.onrender.com/api/orders/${id}`
         );
         const data = await response.json();
-        setOrder(data); // Store the order details in state
-        setLoading(false); // Stop loading
+        setOrder(data);
+        setLoading(false);
       } catch (error) {
         console.error("Failed to fetch order details:", error);
-        setLoading(false); // Stop loading on error
+        setLoading(false);
       }
     };
 
     if (id) {
-      fetchOrder(); // Fetch the order only if the ID is available
+      fetchOrder();
     }
   }, [id]);
 
@@ -42,7 +36,7 @@ const UserOrder = () => {
 
   return (
     <div className="container mx-auto p-5 mt-24">
-      <h1 className="text-3xl font-bold mb-6 text-gray-700">Your Order Details</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-700">Your Orders</h1>
 
       {/* Order Summary */}
       <div className="bg-white shadow-md rounded-lg p-6 border border-gray-300">
@@ -119,6 +113,25 @@ const UserOrder = () => {
             Reorder
           </Link>
         </div>
+      </div>
+
+      {/* User Details */}
+      <div className="mt-8 bg-white shadow-md rounded-lg p-6 border border-gray-300">
+        <h3 className="text-lg font-semibold mb-4 text-gray-600">
+          Shipping Details:
+        </h3>
+        <p className="text-md text-gray-600">
+          Name: {order.userDetails.name}
+        </p>
+        <p className="text-md text-gray-600">
+          Phone: {order.userDetails.phone}
+        </p>
+        <p className="text-md text-gray-600">
+          Email: {order.userDetails.email}
+        </p>
+        <p className="text-md text-gray-600">
+          Address: {order.userDetails.address}
+        </p>
       </div>
     </div>
   );
