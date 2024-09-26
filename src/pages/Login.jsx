@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get the redirect URL from query parameters or default to '/user'
+  const redirectUrl = new URLSearchParams(location.search).get('redirect') || '/user';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,6 +34,7 @@ const Login = () => {
 
       // Parse the response
       const data = await response.json();
+      console.log(data);
 
       if (response.ok) {
         // Store the token in localStorage
@@ -34,16 +42,10 @@ const Login = () => {
         setSuccessMessage('Login successful! Redirecting...');
         setErrorMessage('');
 
-        // Redirect user based on their role
-        if (data.user.role === 'admin') {
-          setTimeout(() => {
-            window.location.href = '/admin'; // Redirect to Admin Dashboard
-          }, 1500);
-        } else {
-          setTimeout(() => {
-            window.location.href = '/user'; // Redirect to User Dashboard
-          }, 1500);
-        }
+        // Redirect to the specified URL (either `/cart` or `/user`)
+        setTimeout(() => {
+          navigate(redirectUrl);  // This will now correctly navigate to `/cart` if that's in the query parameter
+        }, 1500);
       } else {
         // Display error message from server
         setErrorMessage(data.error || 'Login failed. Please try again.');

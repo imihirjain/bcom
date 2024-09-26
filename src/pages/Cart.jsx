@@ -84,7 +84,8 @@ const Cart = () => {
 
     if (!token) {
       // If no token, redirect to login page with a query parameter to return to the cart
-      return navigate("/login?redirect=cart");
+      return navigate("/login?redirect=/cart");  // Notice the leading slash
+
     }
 
     // Ensure userDetails are filled out
@@ -178,10 +179,17 @@ const Cart = () => {
 
                 const orderResult = await orderResponse.json();
 
-                // Clear the cart and navigate to the orders page after successful payment
-                setCart([]);
-                localStorage.removeItem("cart");
-                navigate("/");
+                // After successful order creation, redirect the user to the orders page
+                if (orderResponse.ok) {
+                  // Clear the cart and redirect to "Your Orders" page with the created order's ID
+                  setCart([]);
+                  localStorage.removeItem("cart");
+                  navigate(`/yourorder/${orderResult.order._id}`); 
+                  console.log(orderResult); // Check what the response from backend contains
+// Redirect to UserOrder page with the order ID
+                } else {
+                  toast.error("Order creation failed. Please try again.");
+                }
               } else {
                 toast.error("Payment verification failed. Please try again.");
               }

@@ -23,7 +23,12 @@ const orderSchema = new mongoose.Schema({
     razorpay_payment_id: String,
     razorpay_signature: String,
   },
-  userDetails: {
+  userId: {  // Reference to the User model
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',  // Assuming you have a User model
+    required: true,
+  },
+  userDetails: {  // Additional user information
     name: { type: String, required: true },
     phone: { type: String, required: true },
     email: { type: String, required: true },

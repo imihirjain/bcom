@@ -31,6 +31,8 @@ import AdminMedia from "./admin/component/AdminMedia";
 import Size from "./pages/Size";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import UserOrder from "./pages/UserOrder";
+import UserOrders from "./pages/UserOrder";
 
 function App() {
   return (
@@ -70,6 +72,8 @@ function App() {
         <Route path="/faq" element={<Faq />} />
         <Route path="/size" element={<Size />} />
         <Route path="/collection/:id" element={<CollectionProducts />} />
+        <Route path="/yourorder/:id" element={<UserOrder/>}/>
+        {/* <Route path="/user-orders" element={<UserOrders />} /> */}
 
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminDashboard />}>

@@ -1,42 +1,66 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 const UserOrder = () => {
-  const { id } = useParams(); // Order ID passed via URL
+  const { id } = useParams(); // Extract the order ID from the URL
   const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrder = async () => {
-      const response = await fetch(
-        `https://bcom-backend.onrender.com/api/orders/${id}`
-      );
-      const data = await response.json();
-      setOrder(data);
+      try {
+        const token = localStorage.getItem("token"); // Assuming the token is stored in localStorage
+        const response = await fetch(
+          `https://bcom-backend.onrender.com/api/orders/${id}`, // Fetch the order by its ID
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Pass the token for authenticated requests
+            },
+          }
+        );
+        const data = await response.json();
+        setOrder(data); // Store the order details in state
+        setLoading(false); // Stop loading
+      } catch (error) {
+        console.error("Failed to fetch order details:", error);
+        setLoading(false); // Stop loading on error
+      }
     };
 
-    fetchOrder();
+    if (id) {
+      fetchOrder(); // Fetch the order only if the ID is available
+    }
   }, [id]);
 
-  if (!order) {
+  if (loading) {
     return <div className="text-center py-10 text-xl">Loading...</div>;
   }
 
-  return (
-    <div className="container mx-auto p-5 mt-24 font-semibold">
-      <h1 className="text-3xl font-bold mb-6 text-gray-700">Order Details</h1>
+  if (!order) {
+    return <div className="text-center py-10 text-xl">Order not found!</div>;
+  }
 
+  return (
+    <div className="container mx-auto p-5 mt-24">
+      <h1 className="text-3xl font-bold mb-6 text-gray-700">Your Order Details</h1>
+
+      {/* Order Summary */}
       <div className="bg-white shadow-md rounded-lg p-6 border border-gray-300">
         <div className="mb-4">
-          <h2 className="text-2xl font-bold mb-2">Order ID: {order._id}</h2>
-          <p className="text-lg">
+          <h2 className="text-xl font-bold mb-2 text-gray-800">
+            Order ID: {order._id}
+          </h2>
+          <p className="text-lg text-gray-600">
             Total Price:{" "}
             <span className="font-semibold">₹{order.totalPrice}</span>
           </p>
-          <p className="text-lg">
+          <p className="text-lg text-gray-600">
             Status:{" "}
             <span
               className={`font-semibold ${
-                order.status === "Delivered" ? "text-green-600" : "text-red-600"
+                order.status === "Completed"
+                  ? "text-green-600"
+                  : "text-red-600"
               }`}
             >
               {order.status}
@@ -44,29 +68,42 @@ const UserOrder = () => {
           </p>
         </div>
 
+        {/* Order Items */}
         <div className="mb-4">
-          <h3 className="text-xl font-semibold mb-3 text-gray-600">Items:</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <h3 className="text-lg font-semibold mb-3 text-gray-600">
+            Ordered Items:
+          </h3>
+          <div className="space-y-4">
             {order.cartItems.map((item, idx) => (
-              <div key={idx} className="flex bg-gray-50 p-4 rounded-lg shadow">
+              <div
+                key={idx}
+                className="flex bg-gray-50 p-4 rounded-lg shadow-md space-x-4"
+              >
                 {/* Product Image */}
-                <div className="w-1/3">
+                <div className="w-20 h-20">
                   <img
                     src={item.image} // Assuming the image URL is available in item.image
                     alt={item.name}
-                    className="w-full h-auto rounded-lg"
+                    className="w-full h-full object-cover rounded-lg"
                   />
                 </div>
 
                 {/* Product Details */}
-                <div className="ml-4 w-2/3">
-                  <h4 className="text-lg font-bold mb-1">{item.name}</h4>
-                  <p className="text-sm mb-1">Quantity: {item.quantity}</p>
-                  <p className="text-sm mb-1">Price: ₹{item.price}</p>
-                  <p className="text-sm mb-1">Size: {item.size}</p>
-                  <p className="text-sm mb-1">
+                <div className="flex-1">
+                  <h4 className="text-lg font-semibold mb-1">{item.name}</h4>
+                  <p className="text-sm text-gray-600">
+                    Quantity: {item.quantity}
+                  </p>
+                  <p className="text-sm text-gray-600">Price: ₹{item.price}</p>
+                  <p className="text-sm text-gray-600">Size: {item.size}</p>
+                  <p className="text-sm text-gray-600">
                     Collection: {item.collection || "N/A"}
                   </p>
+                </div>
+
+                {/* Total Price for the item */}
+                <div className="text-right text-lg font-semibold">
+                  ₹{item.price * item.quantity}
                 </div>
               </div>
             ))}
@@ -74,13 +111,13 @@ const UserOrder = () => {
         </div>
 
         {/* Reorder / Track Buttons */}
-        <div className="mt-6 flex justify-end space-x-4">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
+        <div className="mt-6 flex justify-between">
+          <Link to="/track-order" className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
             Track Order
-          </button>
-          <button className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600">
+          </Link>
+          <Link to="/" className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600">
             Reorder
-          </button>
+          </Link>
         </div>
       </div>
     </div>

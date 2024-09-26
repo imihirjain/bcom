@@ -3,40 +3,29 @@ const Payment = require('../models/Payment');
 const { sendOrderConfirmationEmail } = require('../config/mailer');
 
 // Create a new order
-// Create a new order
 exports.createOrder = async (req, res) => {
   try {
-    // Log the entire request body to check if it is being received correctly
-    console.log("Received request body:", req.body);
-
     const { cartItems, totalPrice, paymentData, userDetails } = req.body;
 
-    // Log the userDetails to ensure they're present
-    console.log("Received user details:", userDetails);
-
-    // Check for missing user details and return early if any are missing
+    // Check for missing user details
     if (!userDetails || !userDetails.name || !userDetails.phone || !userDetails.email || !userDetails.address) {
       return res.status(400).json({ message: 'User details are missing or incomplete.' });
     }
 
-    // Create a new order instance and log the details
+    // Create a new order instance
     const newOrder = new Order({
       cartItems,
       totalPrice,
       paymentData,
       userDetails,
-      status: 'Completed',
+      status: 'Completed',  // Assuming status is Completed after payment
     });
 
-    console.log("New order created:", newOrder);
-
-    // Save the order in the database and log the result
+    // Save the order in the database
     const savedOrder = await newOrder.save();
-    console.log("Order saved to database:", savedOrder);
 
-    // Send order confirmation email and log the attempt
+    // Send order confirmation email
     await sendOrderConfirmationEmail(userDetails.email, savedOrder);
-    console.log("Order confirmation email sent to:", userDetails.email);
 
     // Return the response with the saved order
     return res.status(201).json({
@@ -45,8 +34,7 @@ exports.createOrder = async (req, res) => {
     });
 
   } catch (error) {
-    // Catch and log any errors that occur during order creation or email sending
-    console.error("Error creating order or sending email:", error.message);
+    console.error("Error creating order:", error.message);
     return res.status(500).json({
       message: 'Error creating order',
       error: error.message,
@@ -54,20 +42,18 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-
 // Update order status based on payment
 exports.updateOrderStatus = async (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
   try {
-    // Verify the payment using the Payment model (already separated)
-    const payment = await Payment.findOne({ orderId: razorpay_order_id });
-    
+    // Verify the payment
+    const payment = await Payment.findOne({ razorpay_order_id });
     if (!payment) {
       return res.status(404).json({ message: 'Payment not found' });
     }
 
-    // Update the order status based on successful payment
+    // Update the order status if payment is successful
     if (payment.status === 'Success') {
       const order = await Order.findById(payment.orderId);
       if (!order) {
@@ -77,8 +63,7 @@ exports.updateOrderStatus = async (req, res) => {
       order.status = 'Completed';
       await order.save();
 
-
-      // Send order confirmation email after payment success
+      // Send order confirmation email after successful payment
       await sendOrderConfirmationEmail(order.userDetails.email, order);
 
       res.status(200).json({ message: 'Order updated successfully', order });
@@ -97,7 +82,6 @@ exports.getOrderById = async (req, res) => {
 
   try {
     const order = await Order.findById(orderId);
-
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
@@ -109,7 +93,24 @@ exports.getOrderById = async (req, res) => {
   }
 };
 
-// Get all orders (for admin use)
+// Get all orders for a specific user
+exports.getOrdersByUserId = async (req, res) => {
+  const userId = req.user.id;  // Assuming the user ID is stored in the JWT token and extracted by middleware
+
+  try {
+    const orders = await Order.find({ "userDetails._id": userId });
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ message: "No orders found for this user." });
+    }
+
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching orders for user:", error.message);
+    res.status(500).json({ message: "Error fetching user orders", error });
+  }
+};
+
+// Get all orders (admin use)
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find();
