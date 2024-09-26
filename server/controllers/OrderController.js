@@ -3,13 +3,16 @@ const Payment = require('../models/Payment');
 const { sendOrderConfirmationEmail } = require('../config/mailer');
 
 // Create a new order
+// Create a new order
 exports.createOrder = async (req, res) => {
   try {
     // Log the entire request body to check if it is being received correctly
+    console.log("Received request body:", req.body);
 
     const { cartItems, totalPrice, paymentData, userDetails } = req.body;
 
     // Log the userDetails to ensure they're present
+    console.log("Received user details:", userDetails);
 
     // Check for missing user details and return early if any are missing
     if (!userDetails || !userDetails.name || !userDetails.phone || !userDetails.email || !userDetails.address) {
@@ -25,13 +28,15 @@ exports.createOrder = async (req, res) => {
       status: 'Completed',
     });
 
-    // Log new order details before saving
+    console.log("New order created:", newOrder);
 
     // Save the order in the database and log the result
     const savedOrder = await newOrder.save();
+    console.log("Order saved to database:", savedOrder);
 
     // Send order confirmation email and log the attempt
     await sendOrderConfirmationEmail(userDetails.email, savedOrder);
+    console.log("Order confirmation email sent to:", userDetails.email);
 
     // Return the response with the saved order
     return res.status(201).json({

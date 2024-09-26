@@ -78,16 +78,14 @@ const Cart = () => {
 
   // Checkout handler function
   const handleCheckout = async () => {
-    const currentCart = cart.map((item) => ({
-      productId: item.id,
-      name: item.name,
-      description: item.description,
-      image: item.image,
-      price: item.price,
-      quantity: item.quantity,
-      size: item.size,
-      collection: item.collection,
-    }));
+    // Check if the user is logged in by checking localStorage for the token
+    const token = localStorage.getItem("token");
+    console.log(token);
+
+    if (!token) {
+      // If no token, redirect to login page with a query parameter to return to the cart
+      return navigate("/login?redirect=cart");
+    }
 
     // Ensure userDetails are filled out
     if (
@@ -99,7 +97,16 @@ const Cart = () => {
       return toast.error("Please fill out all user details.");
     }
 
-    // Log userDetails and cart data before sending to backend
+    const currentCart = cart.map((item) => ({
+      productId: item.id,
+      name: item.name,
+      description: item.description,
+      image: item.image,
+      price: item.price,
+      quantity: item.quantity,
+      size: item.size,
+      collection: item.collection,
+    }));
 
     try {
       // Step 1: Create an order for payment on the backend
@@ -107,7 +114,10 @@ const Cart = () => {
         "https://bcom-backend.onrender.com/api/payments",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Pass the token for authenticated requests
+          },
           body: JSON.stringify({
             amount: totalPrice, // Total price of the cart
             currency: "INR", // Currency
@@ -120,8 +130,6 @@ const Cart = () => {
       const order = await paymentResponse.json();
 
       if (order && order.id) {
-        // Log order information before proceeding
-
         // Step 2: Set up Razorpay options for payment
         const options = {
           key: order.razorpayKey, // Razorpay key from backend
@@ -140,7 +148,10 @@ const Cart = () => {
                 "https://bcom-backend.onrender.com/api/payments/verify",
                 {
                   method: "POST",
-                  headers: { "Content-Type": "application/json" },
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`, // Pass the token for authenticated requests
+                  },
                   body: JSON.stringify(paymentData),
                 }
               );
@@ -152,7 +163,10 @@ const Cart = () => {
                   "https://bcom-backend.onrender.com/api/orders",
                   {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`, // Pass the token for authenticated requests
+                    },
                     body: JSON.stringify({
                       cartItems: currentCart,
                       totalPrice: totalPrice,
