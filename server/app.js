@@ -15,6 +15,7 @@ const videoRoutes = require('./routes/videoRoutes');
 const orderRoutes = require('./routes/orders');
 // const mediaRoutes = require('./routes/mediaRoutes');
 const mediaRoutes = require('./routes/mediaRoutes');
+const authRoutes = require('./routes/authRoutes');
 // Load environment variables
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.use('/api', videoRoutes);
 app.use('/api', orderRoutes);
 // app.use('/api/media', mediaRoutes);
 app.use('/api/media', mediaRoutes);
+app.use('/api/auth', authRoutes);
 
 // Serve static files from the front-end build folder if you have a front-end
 app.use(express.static(path.join(__dirname, 'build')));

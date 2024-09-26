@@ -1,0 +1,44 @@
+models---->
+
+1.Category.js
+2.Collection .js 
+3. Collection Product.js
+4. Media.js
+5. Order.js
+6. Payment.js
+7. Product.js
+8. Video.js
+
+
+
+controller --->
+1.categoryController.js
+2.collectionController .js 
+3. collectionProductController.js
+4. mediaController.js
+5. orderController.js
+6. paymentController.js
+7. productController.js
+8. videoController.js
+
+
+routes --------->
+
+1.Category.js
+2.Collection .js 
+3. CollectionProduct.js
+4. Media.js
+5. Order.js
+6. Payment.js
+7. Product.js
+8. Video.js
+
+
+config ---->
+cloudinaryconfig.js
+db.js
+mailer.js
+razorpayConfig.js
+
+app.js 
+

@@ -29,6 +29,8 @@ import Refund from "./pages/Refund";
 import Faq from "./pages/Faq";
 import AdminMedia from "./admin/component/AdminMedia";
 import Size from "./pages/Size";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 function App() {
   return (
@@ -48,6 +50,8 @@ function App() {
             </>
           }
         />
+        <Route path="/login" element={<Login />} />
+        <Route path = "/signup" element={<Signup/>} />
         <Route path="orders" element={<AllOrders />} />
         {/* Shop Page Route */}
         <Route path="/shop" element={<ShopPage />} />
