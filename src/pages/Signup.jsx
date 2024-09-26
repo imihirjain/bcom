@@ -19,7 +19,7 @@ const Signup = () => {
 
     try {
       // Make the API request to the signup route
-      const response = await fetch('http://localhost:10000/api/auth/signup', {
+      const response = await fetch('https://bcom-backend.onrender.com/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
