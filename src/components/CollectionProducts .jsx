@@ -4,13 +4,13 @@ import { Link, useParams } from "react-router-dom";
 import Footer from "./Footer";
 
 const CollectionProducts = () => {
-  const { id } = useParams(); // Get collection ID from URL params
-  const [products, setProducts] = useState([]); // State for storing products
-  const [filteredProducts, setFilteredProducts] = useState([]); // State for filtered products
-  const [collectionName, setCollectionName] = useState(""); // State for storing collection name
-  const [error, setError] = useState(null); // State for error handling
-  const [loading, setLoading] = useState(true); // State for loading status
-  const [sortOption, setSortOption] = useState(""); // State for sorting option
+  const { id } = useParams(); 
+  const [products, setProducts] = useState([]); 
+  const [filteredProducts, setFilteredProducts] = useState([]); 
+  const [collectionName, setCollectionName] = useState(""); 
+  const [error, setError] = useState(null); 
+  const [loading, setLoading] = useState(true); 
+  const [sortOption, setSortOption] = useState(""); 
 
   useEffect(() => {
     const fetchCollectionAndProducts = async () => {
@@ -23,7 +23,7 @@ const CollectionProducts = () => {
           throw new Error("Failed to fetch collection details");
         }
         const collectionData = await collectionResponse.json();
-        setCollectionName(collectionData.name); // Assuming collection data has a "name" field
+        setCollectionName(collectionData.name); 
 
         // Fetch Products for the Collection
         const productsResponse = await fetch(
@@ -33,42 +33,40 @@ const CollectionProducts = () => {
           throw new Error("Failed to fetch products");
         }
         const productsData = await productsResponse.json();
-        setProducts(productsData); // Set products from API response
-        setFilteredProducts(productsData); // Initialize filtered products
+        setProducts(productsData); 
+        setFilteredProducts(productsData); 
       } catch (error) {
         setError("Error fetching collection products");
         console.error("Error fetching collection products:", error);
       } finally {
-        setLoading(false); // Stop loading after fetch is complete
+        setLoading(false); 
       }
     };
 
     fetchCollectionAndProducts();
   }, [id]);
 
-  // Function to handle sorting
   const handleSort = (option) => {
     let sortedProducts = [...products];
 
     if (option === "atoz") {
-      sortedProducts.sort((a, b) => a.name.localeCompare(b.name)); // Sort A to Z by name
+      sortedProducts.sort((a, b) => a.name.localeCompare(b.name)); 
     } else if (option === "ztoa") {
-      sortedProducts.sort((a, b) => b.name.localeCompare(a.name)); // Sort Z to A by name
+      sortedProducts.sort((a, b) => b.name.localeCompare(a.name)); 
     } else if (option === "newtoold") {
       sortedProducts.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       ); // Sort New to Old
     } else if (option === "prizehightolow") {
-      sortedProducts.sort((a, b) => b.price - a.price); // Sort Price High to Low
+      sortedProducts.sort((a, b) => b.price - a.price); 
     } else if (option === "prizelowtohigh") {
-      sortedProducts.sort((a, b) => a.price - b.price); // Sort Price Low to High
+      sortedProducts.sort((a, b) => a.price - b.price); 
     }
 
-    setFilteredProducts(sortedProducts); // Update the filtered products state with sorted list
-    setSortOption(option); // Update the selected sort option
+    setFilteredProducts(sortedProducts); 
+    setSortOption(option); 
   };
 
-  // Render loading, error, or product grid
   return (
     <>
       <div className="mt-24 font-indif font-semibold">

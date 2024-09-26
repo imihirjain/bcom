@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"; // Import Link from React Router
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa"; // Import angle icons for navigation
 
 const NewArrival = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [combinedItems, setCombinedItems] = useState([]); // To store combined data from both APIs
   const [hoveredItemIndex, setHoveredItemIndex] = useState(null); // For tracking the hovered item for image navigation
 
-  // Number of images visible at once
   const visibleImages =
     window.innerWidth < 640 ? 1 : window.innerWidth < 768 ? 2 : 3;
 
-  // Fetch data from both APIs and combine them
   useEffect(() => {
     const fetchCombinedProducts = async () => {
       try {
@@ -26,9 +23,8 @@ const NewArrival = () => {
         const productsData = await productsResponse.json();
         const collectionProductsData = await collectionProductsResponse.json();
 
-        // Combine both arrays of data
         const combinedData = [...productsData, ...collectionProductsData];
-        setCombinedItems(combinedData); // Set the combined data
+        setCombinedItems(combinedData.slice(0, 10)); // Limiting the array to only 10 items
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -49,19 +45,6 @@ const NewArrival = () => {
     );
   };
 
-  // Handler for left and right image navigation
-  const handlePrevImage = (index) => {
-    if (hoveredItemIndex === index) {
-      // Add logic for changing to the previous image when available
-    }
-  };
-
-  const handleNextImage = (index) => {
-    if (hoveredItemIndex === index) {
-      // Add logic for changing to the next image when available
-    }
-  };
-
   return (
     <div className="w-full flex flex-col items-center justify-center py-10 sm:py-2 font-indif">
       {/* Text Section */}
@@ -77,7 +60,7 @@ const NewArrival = () => {
       {/* Introduction Section with Arrows */}
       <div className="flex items-center justify-center w-full max-w-6xl mb-2 px-4">
         <button
-          className="text-lg md:text-2xl font-bold text-gray-700 bg-white p-2 mr-2 md:mr-4"
+          className="text-lg md:text-2xl font-bold text-gray-700 bg-white p-2 mb-3 md:mr-1"
           onClick={prevSlide}
         >
           &lt;
@@ -86,7 +69,7 @@ const NewArrival = () => {
           New Arrival
         </h1>
         <button
-          className="text-lg md:text-2xl font-bold text-gray-700 bg-white p-2 ml-2 md:ml-4"
+          className="text-lg md:text-2xl font-bold text-gray-700 bg-white p-2 mb-3 md:ml-1"
           onClick={nextSlide}
         >
           &gt;
@@ -97,7 +80,7 @@ const NewArrival = () => {
       <div className="text-center mb-6 md:mb-10">
         <Link
           to="/collection"
-          className="text-black text-md md:text-lg hover:underline font-gara font-semibold"
+          className="text-black border-2 border-black p-2 hover:bg-black hover:text-white text-md md:text-lg hover:underline font-gara font-semibold"
         >
           View All
         </Link>
@@ -118,12 +101,16 @@ const NewArrival = () => {
               onMouseEnter={() => setHoveredItemIndex(index)}
               onMouseLeave={() => setHoveredItemIndex(null)}
             >
-              {/* Display the first image */}
+              {/* Display the first or second image on hover */}
               <Link to={`/product/${item._id}`}>
                 <img
-                  src={item.images[0]} // Display the first image from the array
+                  src={
+                    hoveredItemIndex === index && item.images[1]
+                      ? item.images[1]
+                      : item.images[0]
+                  } // Swap to second image on hover
                   alt={item.name}
-                  className="w-full h-[400px] sm:h-[400px] md:h-[500px] object-cover rounded-lg" // Responsive height for images
+                  className="w-full h-[400px] sm:h-[400px] md:h-[500px] object-cover rounded-sm" // Responsive height for images
                 />
               </Link>
 
@@ -138,26 +125,12 @@ const NewArrival = () => {
                 </div>
               )}
 
-              {/* Left & Right Image Navigation Buttons on Hover */}
-              {hoveredItemIndex === index && (
-                <>
-                  <FaAngleLeft
-                    className="absolute left-2 top-1/2 transform -translate-y-1/2 text-lg sm:text-2xl text-white cursor-pointer"
-                    onClick={() => handlePrevImage(index)}
-                  />
-                  <FaAngleRight
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-lg sm:text-2xl text-white cursor-pointer"
-                    onClick={() => handleNextImage(index)}
-                  />
-                </>
-              )}
-
               <div className="ml-2 md:ml-4 mb-2 py-2 md:py-4">
-                <h2 className="text-sm sm:text-md md:text-lg font-indif font-bold">
+                <h2 className="text-sm sm:text-md md:text-lg text-center font-indif font-bold">
                   {item.name}
                 </h2>{" "}
                 {/* Responsive text size */}
-                <p className="text-gray-500 font-gara font-semibold">
+                <p className="text-gray-500 font-gara font-semibold text-center">
                   Rs. {item.price}
                 </p>{" "}
                 {/* Responsive price text */}
