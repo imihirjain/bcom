@@ -7,6 +7,13 @@ exports.createOrder = async (req, res) => {
   try {
     const { cartItems, totalPrice, paymentData, userDetails } = req.body;
 
+    // Ensure the user is authenticated
+    const userId = req.user ? req.user._id : null;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is missing. Please make sure you are logged in.' });
+    }
+
     // Check for missing user details
     if (!userDetails || !userDetails.name || !userDetails.phone || !userDetails.email || !userDetails.address) {
       return res.status(400).json({ message: 'User details are missing or incomplete.' });
@@ -18,7 +25,8 @@ exports.createOrder = async (req, res) => {
       totalPrice,
       paymentData,
       userDetails,
-      status: 'Completed',  // Assuming status is Completed after payment
+      userId,  // Include userId here
+      status: 'Completed',
     });
 
     // Save the order in the database
@@ -93,22 +101,25 @@ exports.getOrderById = async (req, res) => {
   }
 };
 
+
 // Get all orders for a specific user
 exports.getOrdersByUserId = async (req, res) => {
-  const userId = req.user.id;  // Assuming the user ID is stored in the JWT token and extracted by middleware
+  const { userId } = req.params;
 
   try {
-    const orders = await Order.find({ "userDetails._id": userId });
+    const orders = await Order.find({ userId: userId });
+
     if (!orders || orders.length === 0) {
-      return res.status(404).json({ message: "No orders found for this user." });
+      return res.status(404).json({ message: 'No orders found for this user' });
     }
 
     res.status(200).json(orders);
   } catch (error) {
-    console.error("Error fetching orders for user:", error.message);
-    res.status(500).json({ message: "Error fetching user orders", error });
+    console.error('Error fetching user orders:', error.message);
+    res.status(500).json({ message: 'Error fetching user orders' });
   }
 };
+
 
 // Get all orders (admin use)
 exports.getAllOrders = async (req, res) => {

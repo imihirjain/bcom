@@ -5,29 +5,32 @@ const User = require('../models/User');
 exports.protect = async (req, res, next) => {
   let token;
 
-  // Check if the Authorization header contains a Bearer token
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    token = req.headers.authorization.split(' ')[1]; // Extract the token from "Bearer <token>"
+    token = req.headers.authorization.split(' ')[1];
+    console.log('Token found:', token);  // Log the token for debugging
   }
 
-  // If no token is provided, return an unauthorized response
   if (!token) {
     return res.status(401).json({ message: 'Not authorized, no token provided' });
   }
 
   try {
-    // Verify the token and decode the user's ID
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Decoded token:', decoded);  // Log the decoded token
 
-    // Fetch the user and attach the user data to the request object, excluding the password
     req.user = await User.findById(decoded.id).select('-password');
+    console.log('User found:', req.user);  // Log the user details
 
-    // Call the next middleware or controller
-    next();
+    if (!req.user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    next(); // Move to the next middleware or controller
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ message: 'Token expired, please log in again' });
     }
+    console.error('Error verifying token:', error);  // Log token verification error
     return res.status(401).json({ message: 'Not authorized, token verification failed' });
   }
 };

@@ -10,7 +10,7 @@ const UserOrder = () => {
     const fetchOrder = async () => {
       try {
         const response = await fetch(
-          `https://bcom-backend.onrender.com/api/orders/${id}`
+          `https://bcom-backend.onrender.com/api/user/${id}`
         );
         const data = await response.json();
         setOrder(data);

@@ -15,10 +15,18 @@ const Cart = () => {
   });
   const navigate = useNavigate();
 
-  // Fetch cart data from localStorage
+  // Fetch cart and user details from localStorage
   useEffect(() => {
     const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+    const storedUserDetails = JSON.parse(localStorage.getItem("userDetails")) || {
+      name: "",
+      phone: "",
+      email: "",
+      address: "",
+    };
+
     setCart(cartData);
+    setUserDetails(storedUserDetails);
     calculateTotalPrice(cartData);
   }, []);
 
@@ -30,15 +38,10 @@ const Cart = () => {
     calculateTotalPrice(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
 
-    // Show toast notification
     toast.success("Item quantity increased!", {
       position: "top-center",
-      autoClose: 2000, // Close after 2 seconds
+      autoClose: 2000,
       hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
     });
   };
 
@@ -55,10 +58,7 @@ const Cart = () => {
 
   // Calculate total price of cart items
   const calculateTotalPrice = (cartData) => {
-    const total = cartData.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
+    const total = cartData.reduce((acc, item) => acc + item.price * item.quantity, 0);
     setTotalPrice(total);
   };
 
@@ -73,28 +73,21 @@ const Cart = () => {
 
   // Handle input changes for user details
   const handleUserDetailsChange = (e) => {
-    setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setUserDetails({ ...userDetails, [name]: value });
+    localStorage.setItem("userDetails", JSON.stringify({ ...userDetails, [name]: value }));
   };
 
   // Checkout handler function
   const handleCheckout = async () => {
-    // Check if the user is logged in by checking localStorage for the token
     const token = localStorage.getItem("token");
-    console.log(token);
 
     if (!token) {
-      // If no token, redirect to login page with a query parameter to return to the cart
-      return navigate("/login?redirect=/cart");  // Notice the leading slash
-
+      // Redirect to login page with redirect query to cart
+      return navigate("/login?redirect=/cart");
     }
 
-    // Ensure userDetails are filled out
-    if (
-      !userDetails.name ||
-      !userDetails.phone ||
-      !userDetails.email ||
-      !userDetails.address
-    ) {
+    if (!userDetails.name || !userDetails.phone || !userDetails.email || !userDetails.address) {
       return toast.error("Please fill out all user details.");
     }
 
@@ -110,20 +103,20 @@ const Cart = () => {
     }));
 
     try {
-      // Step 1: Create an order for payment on the backend
+      // Create order for payment on the backend
       const paymentResponse = await fetch(
         "https://bcom-backend.onrender.com/api/payments",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Pass the token for authenticated requests
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            amount: totalPrice, // Total price of the cart
-            currency: "INR", // Currency
-            cartItems: currentCart, // Cart items in the order
-            userDetails: userDetails, // User details
+            amount: totalPrice,
+            currency: "INR",
+            cartItems: currentCart,
+            userDetails,
           }),
         }
       );
@@ -131,12 +124,12 @@ const Cart = () => {
       const order = await paymentResponse.json();
 
       if (order && order.id) {
-        // Step 2: Set up Razorpay options for payment
+        // Set up Razorpay options for payment
         const options = {
-          key: order.razorpayKey, // Razorpay key from backend
-          amount: order.amount, // Amount in paise (e.g., INR 500 = 50000 paise)
+          key: order.razorpayKey,
+          amount: order.amount,
           currency: order.currency,
-          order_id: order.id, // Order ID from backend
+          order_id: order.id,
           handler: async function (response) {
             const paymentData = {
               razorpay_order_id: response.razorpay_order_id,
@@ -151,7 +144,7 @@ const Cart = () => {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`, // Pass the token for authenticated requests
+                    Authorization: `Bearer ${token}`,
                   },
                   body: JSON.stringify(paymentData),
                 }
@@ -166,27 +159,24 @@ const Cart = () => {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
-                      Authorization: `Bearer ${token}`, // Pass the token for authenticated requests
+                      Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify({
                       cartItems: currentCart,
-                      totalPrice: totalPrice,
-                      paymentData: paymentData,
-                      userDetails: userDetails, // Include user details in the order
+                      totalPrice,
+                      paymentData,
+                      userDetails,
                     }),
                   }
                 );
 
                 const orderResult = await orderResponse.json();
 
-                // After successful order creation, redirect the user to the orders page
                 if (orderResponse.ok) {
-                  // Clear the cart and redirect to "Your Orders" page with the created order's ID
+                  // Clear cart and redirect to orders page
                   setCart([]);
                   localStorage.removeItem("cart");
-                  navigate(`/yourorder/${orderResult.order._id}`); 
-                  console.log(orderResult); // Check what the response from backend contains
-// Redirect to UserOrder page with the order ID
+                  navigate(`/yourorder/${orderResult.order._id}`);
                 } else {
                   toast.error("Order creation failed. Please try again.");
                 }
@@ -195,9 +185,7 @@ const Cart = () => {
               }
             } catch (error) {
               console.error("Error during payment verification:", error);
-              toast.error(
-                "Something went wrong during payment verification. Please try again."
-              );
+              toast.error("Something went wrong during payment verification. Please try again.");
             }
           },
           prefill: {
@@ -227,7 +215,7 @@ const Cart = () => {
     return (
       <div className="container mx-auto text-center mt-24 flex justify-center items-center flex-col">
         <img
-          src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" // Replace with actual icon URL
+          src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png"
           alt="Empty Cart"
           className="mx-auto mb-4 w-64 h-64"
         />
@@ -247,10 +235,7 @@ const Cart = () => {
         <h1 className="text-3xl font-bold mb-4">Your Cart</h1>
         <div className="grid gap-5">
           {cart.map((item, index) => (
-            <div
-              key={item.id}
-              className="flex justify-between items-center p-4 border-b"
-            >
+            <div key={item.id} className="flex justify-between items-center p-4 border-b">
               <div className="flex gap-4">
                 <img src={item.image} alt={item.name} className="w-20 h-20" />
                 <div>
@@ -258,26 +243,11 @@ const Cart = () => {
                   <p>Price: ₹{item.price}</p>
                   <p>Size: {item.size}</p>
                   <div className="flex items-center mt-2">
-                    <button
-                      onClick={() => handleDecrement(index)}
-                      className="px-4 py-2 bg-gray-200"
-                    >
-                      -
-                    </button>
+                    <button onClick={() => handleDecrement(index)} className="px-4 py-2 bg-gray-200">-</button>
                     <span className="px-4">{item.quantity}</span>
-                    <button
-                      onClick={() => handleIncrement(index)}
-                      className="px-4 py-2 bg-gray-200"
-                    >
-                      +
-                    </button>
+                    <button onClick={() => handleIncrement(index)} className="px-4 py-2 bg-gray-200">+</button>
                   </div>
-                  <button
-                    onClick={() => handleRemove(index)}
-                    className="bg-red-500 text-white px-6 py-2 mt-4"
-                  >
-                    Remove
-                  </button>
+                  <button onClick={() => handleRemove(index)} className="bg-red-500 text-white px-6 py-2 mt-4">Remove</button>
                 </div>
               </div>
               <p>Total: ₹{item.price * item.quantity}</p>
@@ -321,10 +291,7 @@ const Cart = () => {
               className="p-2 border"
             />
           </div>
-          <button
-            onClick={handleCheckout}
-            className="bg-blue-500 text-white px-6 py-2 mt-4"
-          >
+          <button onClick={handleCheckout} className="bg-blue-500 text-white px-6 py-2 mt-4">
             Proceed to Checkout
           </button>
         </div>
