@@ -82,7 +82,7 @@ const CreateCollection = () => {
   };
 
   return (
-    <div className="mt-24 flex flex-col items-center justify-center w-full">
+    <div className="mt-36 flex flex-col items-center justify-center w-full">
       <ToastContainer
         position="top-center"
         autoClose={3000}

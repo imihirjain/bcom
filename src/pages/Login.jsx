@@ -45,12 +45,16 @@ const Login = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", data.user._id); // Store userId
 
+        // Determine the redirect URL based on user role
+        const userRole = data.user.role; // Assuming the role is returned in user object
+        const redirectPath = userRole === "admin" ? "/admin" : "/user"; // Redirect based on role
+
         setSuccessMessage("Login successful! Redirecting...");
         setErrorMessage("");
 
-        // Redirect to the specified URL (either `/cart` or `/user`)
+        // Redirect to the specified URL (either `/admin` or `/user`)
         setTimeout(() => {
-          navigate(redirectUrl);
+          navigate(redirectPath); // Navigate to the appropriate path based on user role
         }, 1500);
       } else {
         // Display error message from server

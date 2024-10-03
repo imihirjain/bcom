@@ -131,7 +131,7 @@ const CreateCategoryProduct = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10">
+    <div className="min-h-screen mt-36 bg-gray-100 flex flex-col items-center justify-center py-10">
       <ToastContainer
         position="top-center"
         autoClose={3000}
