@@ -21,8 +21,9 @@ const ProfilePage = () => {
         const response = await axios.get("https://bcom-backend.onrender.com/api/auth/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
-          },
-        });
+        },
+    });
+    console.log(response)
         setProfileData(response.data);
       } catch (err) {
         setError("Failed to fetch profile data");
