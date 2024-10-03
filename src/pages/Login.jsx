@@ -15,13 +15,13 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Prepare the request body for the login API
     const loginData = {
       email,
       password,
     };
-
+  
     try {
       // Make the API request
       const response = await fetch('https://bcom-backend.onrender.com/api/auth/login', {
@@ -31,20 +31,22 @@ const Login = () => {
         },
         body: JSON.stringify(loginData),
       });
-
+  
       // Parse the response
       const data = await response.json();
-      console.log(data);
-
+      console.log(data); // Check if `user._id` is available in the response
+  
       if (response.ok) {
-        // Store the token in localStorage
+        // Store the token and userId in localStorage
         localStorage.setItem('token', data.token);
+        localStorage.setItem('userId', data.user._id);  // Store userId
+  
         setSuccessMessage('Login successful! Redirecting...');
         setErrorMessage('');
-
+  
         // Redirect to the specified URL (either `/cart` or `/user`)
         setTimeout(() => {
-          navigate(redirectUrl);  // This will now correctly navigate to `/cart` if that's in the query parameter
+          navigate(redirectUrl);
         }, 1500);
       } else {
         // Display error message from server
@@ -55,6 +57,7 @@ const Login = () => {
       setErrorMessage('An error occurred. Please try again.');
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100">

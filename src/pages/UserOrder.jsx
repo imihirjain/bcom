@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
 const UserOrder = () => {
-  const { id } = useParams(); // Extract the order ID from the URL
+  const { id } = useParams(); // Extract the dynamic order ID from the URL
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -10,10 +10,11 @@ const UserOrder = () => {
     const fetchOrder = async () => {
       try {
         const response = await fetch(
-          `https://bcom-backend.onrender.com/api/user/${id}`
+          `http://localhost:5000/api/user/${id}` // Dynamic ID in the API call
         );
         const data = await response.json();
         setOrder(data);
+        console.log(data);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch order details:", error);
@@ -24,7 +25,7 @@ const UserOrder = () => {
     if (id) {
       fetchOrder();
     }
-  }, [id]);
+  }, [id]); // Dependency array includes id to re-fetch when it changes
 
   if (loading) {
     return <div className="text-center py-10 text-xl">Loading...</div>;

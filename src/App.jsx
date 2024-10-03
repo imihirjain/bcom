@@ -34,8 +34,11 @@ import Signup from "./pages/Signup";
 import UserOrder from "./pages/UserOrder";
 import UserOrders from "./pages/UserOrder";
 
+import whatsappLogo from "./assets/what.png"
+
 function App() {
   return (
+    <>
     <div className="overflow-x-hidden">
       <Navbar />
       <Routes>
@@ -72,7 +75,8 @@ function App() {
         <Route path="/faq" element={<Faq />} />
         <Route path="/size" element={<Size />} />
         <Route path="/collection/:id" element={<CollectionProducts />} />
-        <Route path="/yourorder/:id" element={<UserOrder/>}/>
+        <Route path="/user/:userId/" element={<UserOrder />} />
+
         {/* <Route path="/user-orders" element={<UserOrders />} /> */}
 
         {/* Admin Routes */}
@@ -94,7 +98,23 @@ function App() {
           <Route path="media" element={<AdminMedia />} />
         </Route>
       </Routes>
+
+
+
     </div>
+    <div className="fixed bottom-3 right-3 p-3 z-50"> {/* Adjust z-index and padding as needed */}
+      <a
+        href="https://wa.me/917015290569?text=Hello%20How%20can%20I%20help%20you?"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center space-x-2"
+      >
+        <img src={whatsappLogo} width="110" alt="WhatsApp Logo" /> {/* Increased image width */}
+        {/* <span className="text-lg font-medium">Hello, how can I help you?</span> */}
+      </a>
+    </div>
+
+    </>
   );
 }
 

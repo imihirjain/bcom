@@ -11,6 +11,7 @@ const Cart = () => {
     name: "",
     phone: "",
     email: "",
+    pincode: "",
     address: "",
   });
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Cart = () => {
       name: "",
       phone: "",
       email: "",
+      pincode:"",
       address: "",
     };
 
@@ -81,6 +83,9 @@ const Cart = () => {
   // Checkout handler function
   const handleCheckout = async () => {
     const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
+    const userId = localStorage.getItem('userId');
+    console.log(userId);
 
     if (!token) {
       // Redirect to login page with redirect query to cart
@@ -166,17 +171,20 @@ const Cart = () => {
                       totalPrice,
                       paymentData,
                       userDetails,
+                      userId: userId, 
                     }),
                   }
                 );
 
                 const orderResult = await orderResponse.json();
+                console.log(orderResult);
 
                 if (orderResponse.ok) {
                   // Clear cart and redirect to orders page
                   setCart([]);
                   localStorage.removeItem("cart");
-                  navigate(`/yourorder/${orderResult.order._id}`);
+                  navigate(`/user/${userId}`);
+
                 } else {
                   toast.error("Order creation failed. Please try again.");
                 }
@@ -192,6 +200,7 @@ const Cart = () => {
             name: userDetails.name,
             email: userDetails.email,
             contact: userDetails.phone,
+            pincode: userDetails.pincode,
             address: userDetails.address,
           },
           theme: {
@@ -280,6 +289,14 @@ const Cart = () => {
               name="email"
               placeholder="Enter Email"
               value={userDetails.email}
+              onChange={handleUserDetailsChange}
+              className="p-2 border"
+            />
+              <input
+              type="number"
+              name="pincode"
+              placeholder="Enter Pincode"
+              value={userDetails.pincode}
               onChange={handleUserDetailsChange}
               className="p-2 border"
             />
