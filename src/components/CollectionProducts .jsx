@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import Footer from "./Footer";
+import CollectionBanner from "./CollectionBanner";
 
 const CollectionProducts = () => {
   const { id } = useParams();
@@ -11,6 +12,7 @@ const CollectionProducts = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [sortOption, setSortOption] = useState("");
+  const [hoveredImage, setHoveredImage] = useState({}); // State to manage hovered image
 
   useEffect(() => {
     const fetchCollectionAndProducts = async () => {
@@ -70,6 +72,7 @@ const CollectionProducts = () => {
   return (
     <>
       <div className="mt-24 font-indif font-semibold">
+        <CollectionBanner />
         <h2 className="text-xl font-bold ml-7">
           Collection's:{" "}
           {collectionName ? `${collectionName} ` : "Collection Products"}
@@ -97,33 +100,27 @@ const CollectionProducts = () => {
           </select>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10">
+        <div className="flex flex-wrap gap-6 mt-10">
           {filteredProducts.map((product) => (
             <div
               key={product._id}
-              className="relative group shadow-md ml-7 p-4 bg-white rounded-sm h-full"
+              className="relative group shadow-md ml-7 p-4 bg-white rounded-sm w-80 h-100"
             >
               {/* Product Image */}
-              <div className="relative w-full overflow-hidden rounded-sm">
+              <div className="relative w-72 overflow-hidden rounded-sm">
                 {product.images && product.images.length > 0 && (
                   <Link to={`/product/${product._id}`}>
                     <img
-                      src={product.images[0]} // Display the first image
+                      src={hoveredImage[product._id] || product.images[0]} // Use hovered image or default to the first image
                       alt={product.name}
-                      className="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105"
+                      className="w-72 h-96 object-cover transform transition-transform duration-300 group-hover:scale-105"
+                      onMouseEnter={() =>
+                        setHoveredImage({ [product._id]: product.images[1] })
+                      } // Set to second image on hover
+                      onMouseLeave={() => setHoveredImage({})} // Reset on mouse leave
                     />
                   </Link>
                 )}
-
-                {/* Angle Left Icon */}
-                <div className="absolute left-2 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <FaAngleLeft className="text-3xl cursor-pointer text-white bg-black bg-opacity-50 p-2" />
-                </div>
-
-                {/* Angle Right Icon */}
-                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <FaAngleRight className="text-3xl cursor-pointer text-white bg-black bg-opacity-50 p-2" />
-                </div>
 
                 {/* Quick Buy Button */}
                 <Link to={`/product/${product._id}`}>

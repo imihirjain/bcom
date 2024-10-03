@@ -183,20 +183,20 @@ const Navbar = () => {
                 </div>
 
                 <Link to={"/"}>
-                  {/* <img
-                      src={
-                        location.pathname === "/"
-                          ? isScrolled || isHovered
-                            ? hoverLogo
-                            : logo
-                          : hoverLogo
-                      }
-                      alt="Logo"
-                      className="h-16 w-32 lg:ml-40 transition-opacity duration-300"
-                    /> */}
-                  <p className="mt-6 h-12 text-2xl lg:text-4xl font-light font-corm uppercase">
+                  <img
+                    src={
+                      location.pathname === "/"
+                        ? isScrolled || isHovered
+                          ? hoverLogo
+                          : logo
+                        : hoverLogo
+                    }
+                    alt="Logo"
+                    className="h-16 p-2 w-48 ml-14 lg:mr-12 lg:w-72 lg:ml-40 transition-opacity duration-300"
+                  />
+                  {/* <p className="mt-6 h-12 ml-12 text-2xl lg:text-4xl font-light font-corm uppercase">
                     Dev and Viv
-                  </p>
+                  </p> */}
                 </Link>
                 <div className="flex ">
                   <Link
