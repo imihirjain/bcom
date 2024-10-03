@@ -6,11 +6,16 @@ import {
   FaVoicemail,
 } from "react-icons/fa";
 
+import logo from "../assets/HS&DV/logo.png";
+
 const Footer = () => {
   return (
     <footer className="bg-gray-100 py-8 px-4 mt-[100px]">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-sm sm:text-base">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 text-sm sm:text-base">
         {/* Customer Care Section */}
+        <div>
+          <img src={logo} alt="" className="bg-remove w-48 h-48" />
+        </div>
         <div className="text-left">
           <h4 className="font-indif font-bold text-lg sm:text-2xl">
             CUSTOMER CARE

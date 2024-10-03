@@ -33,6 +33,26 @@ const NewArrival = () => {
     fetchCombinedProducts();
   }, []);
 
+  // Swipe Handling
+  const [startX, setStartX] = useState(0);
+
+  const handleTouchStart = (e) => {
+    setStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    const currentX = e.touches[0].clientX;
+    const diffX = startX - currentX;
+
+    if (diffX > 50) {
+      // Swipe left
+      nextSlide();
+    } else if (diffX < -50) {
+      // Swipe right
+      prevSlide();
+    }
+  };
+
   const prevSlide = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? combinedItems.length - visibleImages : prevIndex - 1
@@ -45,31 +65,8 @@ const NewArrival = () => {
     );
   };
 
-  // Touch event handlers
-  let startX = 0;
-  const threshold = 50; // Minimum swipe distance in pixels to change slides
-
-  const handleTouchStart = (e) => {
-    startX = e.touches[0].clientX; // Store the initial touch position
-  };
-
-  const handleTouchMove = (e) => {
-    const moveX = e.touches[0].clientX - startX; // Calculate the movement
-    if (moveX > threshold) {
-      prevSlide(); // Move to previous slide if swiped right
-      startX = e.touches[0].clientX; // Update startX for next movement
-    } else if (moveX < -threshold) {
-      nextSlide(); // Move to next slide if swiped left
-      startX = e.touches[0].clientX; // Update startX for next movement
-    }
-  };
-
   return (
-    <div
-      className="w-full flex flex-col items-center justify-center py-10 sm:py-2 font-indif"
-      onTouchStart={handleTouchStart} // Attach touch start handler
-      onTouchMove={handleTouchMove} // Attach touch move handler
-    >
+    <div className="w-full flex flex-col items-center justify-center py-10 sm:py-2 font-indif">
       {/* Text Section */}
       <div className="text-center mb-6 px-4">
         <h2 className="text-[20px] md:text-[25px] mt-[40px] mb-2 font-semibold uppercase">
@@ -82,21 +79,30 @@ const NewArrival = () => {
 
       {/* Introduction Section with Arrows */}
       <div className="flex items-center justify-center w-full max-w-6xl mb-2 px-4">
-        <button
-          className="text-lg md:text-2xl font-bold text-gray-700 bg-white p-2 mb-3 md:mr-1"
-          onClick={prevSlide}
-        >
-          &lt;
-        </button>
-        <h1 className="text-[20px] md:text-[25px] font-indif mb-2 cursor-pointer font-semibold">
-          New Arrival
-        </h1>
-        <button
-          className="text-lg md:text-2xl font-bold text-gray-700 bg-white p-2 mb-3 md:ml-1"
-          onClick={nextSlide}
-        >
-          &gt;
-        </button>
+        {window.innerWidth >= 640 && ( // Show arrows only on larger screens
+          <>
+            <button
+              className="text-lg md:text-2xl font-bold text-gray-700 bg-white p-2 mb-3 md:mr-1"
+              onClick={prevSlide}
+            >
+              &lt;
+            </button>
+            <h1 className="text-[20px] md:text-[25px] font-indif mb-2 cursor-pointer font-semibold">
+              New Arrival
+            </h1>
+            <button
+              className="text-lg md:text-2xl font-bold text-gray-700 bg-white p-2 mb-3 md:ml-1"
+              onClick={nextSlide}
+            >
+              &gt;
+            </button>
+          </>
+        )}
+        {window.innerWidth < 640 && ( // Hide arrows on smaller screens
+          <h1 className="text-[20px] md:text-[25px] font-indif mb-2 cursor-pointer font-semibold">
+            New Arrival
+          </h1>
+        )}
       </div>
 
       {/* View All Link */}
@@ -110,7 +116,11 @@ const NewArrival = () => {
       </div>
 
       {/* Carousel Section (Images) */}
-      <div className="relative w-full overflow-hidden px-4">
+      <div
+        className="relative w-full overflow-hidden px-4"
+        onTouchStart={handleTouchStart} // Touch start handler
+        onTouchMove={handleTouchMove} // Touch move handler
+      >
         <div
           className="flex transition-transform ease-out duration-500 gap-4 object-fit"
           style={{

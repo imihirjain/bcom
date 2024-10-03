@@ -177,7 +177,7 @@ const Navbar = () => {
                   </a>
                   <FontAwesomeIcon
                     icon={faSearch}
-                    className="mt-1 cursor-pointer text-xl "
+                    className="mt-1 hidden lg:block cursor-pointer text-xl "
                     onClick={handleSearchClick}
                   />
                 </div>
