@@ -32,89 +32,88 @@ import Size from "./pages/Size";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import UserOrder from "./pages/UserOrder";
-import UserProfile from "./pages/UserProfile"
+import UserProfile from "./pages/UserProfile";
 
-import whatsappLogo from "./assets/what.png"
+import whatsappLogo from "./assets/what.png";
 
 function App() {
   return (
     <>
-    <div className="overflow-x-hidden">
-      <Navbar />
-      <Routes>
-        {/* Home Page Route */}
-        <Route
-          path="/"
-          element={
-            <>
-              <NewArrival />
-              <Discover />
-              <Collection />
-              {/* <VideoHome /> */}
-              <Footer />
-            </>
-          }
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path = "/signup" element={<Signup/>} />
-        <Route path="/user" element={<UserProfile />} />
-        <Route path="orders" element={<AllOrders />} />
-        {/* Shop Page Route */}
-        <Route path="/shop" element={<ShopPage />} />
-
-        {/* Product Info Page Route */}
-        <Route path="/product/:id" element={<ProductInfo />} />
-
-        {/* Contact Page Route */}
-        <Route path="/contact" element={<ContactForm />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/category/:id" element={<CategoryProducts />} />
-        <Route path="/carrer" element={<Carrer />} />
-        <Route path="/shipping-policy" element={<Shipping />} />
-        <Route path="/refund-policy" element={<Refund />} />
-        <Route path="/faq" element={<Faq />} />
-        <Route path="/size" element={<Size />} />
-        <Route path="/collection/:id" element={<CollectionProducts />} />
-        <Route path="/user/:userId/" element={<UserOrder />} />
-
-        {/* <Route path="/user-orders" element={<UserOrders />} /> */}
-
-        {/* Admin Routes */}
-        <Route path="/admin" element={<AdminDashboard />}>
-          <Route path="overview" element={<Overview />} />
-          <Route path="create-category" element={<CreateCategory />} />
-          <Route path="create-collection" element={<CreateCollection />} />
+      <div className="overflow-x-hidden">
+        <Navbar />
+        <Routes>
+          {/* Home Page Route */}
           <Route
-            path="create-category-product"
-            element={<CreateCategoryProduct />}
+            path="/"
+            element={
+              <>
+                <NewArrival />
+                <Discover />
+                <Collection />
+                {/* <VideoHome /> */}
+                <Footer />
+              </>
+            }
           />
-          <Route
-            path="create-collection-product"
-            element={<CreateCollectionProduct />}
-          />
-          <Route path="all-orders" element={<AllOrders />} />
-          <Route path="video-upload" element={<VideoUpload />} />
+          {/* <Route path="/user-orders" element={<UserOrder />} /> */}
+
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/user" element={<UserProfile />} />
           <Route path="orders" element={<AllOrders />} />
-          <Route path="media" element={<AdminMedia />} />
-        </Route>
-      </Routes>
+          {/* Shop Page Route */}
+          <Route path="/shop" element={<ShopPage />} />
 
+          {/* Product Info Page Route */}
+          <Route path="/product/:id" element={<ProductInfo />} />
 
+          {/* Contact Page Route */}
+          <Route path="/contact" element={<ContactForm />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/category/:id" element={<CategoryProducts />} />
+          <Route path="/carrer" element={<Carrer />} />
+          <Route path="/shipping-policy" element={<Shipping />} />
+          <Route path="/refund-policy" element={<Refund />} />
+          <Route path="/faq" element={<Faq />} />
+          <Route path="/size" element={<Size />} />
+          <Route path="/collection/:id" element={<CollectionProducts />} />
+          <Route path="/users/:userId/" element={<UserOrder />} />
 
-    </div>
-    <div className="fixed bottom-3 right-3 p-3 z-50"> {/* Adjust z-index and padding as needed */}
-      <a
-        href="https://wa.me/917015290569?text=Hello%20How%20can%20I%20help%20you?"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center space-x-2"
-      >
-        <img src={whatsappLogo} width="110" alt="WhatsApp Logo" /> {/* Increased image width */}
-        {/* <span className="text-lg font-medium">Hello, how can I help you?</span> */}
-      </a>
-    </div>
-
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminDashboard />}>
+            <Route path="overview" element={<Overview />} />
+            <Route path="create-category" element={<CreateCategory />} />
+            <Route path="create-collection" element={<CreateCollection />} />
+            <Route
+              path="create-category-product"
+              element={<CreateCategoryProduct />}
+            />
+            <Route
+              path="create-collection-product"
+              element={<CreateCollectionProduct />}
+            />
+            <Route path="all-orders" element={<AllOrders />} />
+            <Route path="video-upload" element={<VideoUpload />} />
+            <Route path="orders" element={<AllOrders />} />
+            <Route path="media" element={<AdminMedia />} />
+          </Route>
+        </Routes>
+      </div>
+      <div className="fixed bottom-3 right-3 p-3 z-50">
+        {" "}
+        {/* Adjust z-index and padding as needed */}
+        <a
+          href="https://wa.me/917015290569?text=Hello%20How%20can%20I%20help%20you?"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center space-x-2"
+        >
+          <img src={whatsappLogo} width="110" alt="WhatsApp Logo" />{" "}
+          {/* Increased image width */}
+          {/* <span className="text-lg font-medium">Hello, how can I help you?</span> */}
+        </a>
+      </div>
     </>
   );
 }

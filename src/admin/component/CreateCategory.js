@@ -34,7 +34,9 @@ const CreateCategory = () => {
       try {
         await axios.put(
           `https://bcom-backend.onrender.com/api/categories/${categoryId}`,
-          { name }
+          {
+            name,
+          }
         );
         toast.success("Category updated successfully!");
         setEditMode(false);

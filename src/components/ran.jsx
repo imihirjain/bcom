@@ -11,8 +11,12 @@ const Navbar = () => {
   const fetchProducts = async (query) => {
     try {
       const [response1, response2] = await Promise.all([
-        fetch(`https://bcom-backend.onrender.com/api/products/products?name=${query}`),
-        fetch(`https://bcom-backend.onrender.com/api/collection-products/products?name=${query}`)
+        fetch(
+          `https://bcom-backend.onrender.com/api/products/products?name=${query}`
+        ),
+        fetch(
+          `https://bcom-backend.onrender.com/api/collection-products/products?name=${query}`
+        ),
       ]);
 
       const data1 = await response1.json();
@@ -37,7 +41,7 @@ const Navbar = () => {
     if (query.length > 2) {
       fetchProducts(query);
     } else {
-      setSearchResults([]); 
+      setSearchResults([]);
     }
   };
 
@@ -45,7 +49,7 @@ const Navbar = () => {
     e.preventDefault();
 
     if (searchQuery.length > 2) {
-      fetchProducts(searchQuery); 
+      fetchProducts(searchQuery);
     }
   };
 
@@ -68,7 +72,10 @@ const Navbar = () => {
                   placeholder="Search products..."
                   className="p-2 w-full border"
                 />
-                <button type="submit" className="bg-[#cdac99] text-white p-2 ml-2">
+                <button
+                  type="submit"
+                  className="bg-[#cdac99] text-white p-2 ml-2"
+                >
                   Search
                 </button>
                 <FontAwesomeIcon
@@ -86,7 +93,11 @@ const Navbar = () => {
           <div className="search-results grid grid-cols-3 gap-4 mt-4">
             {searchResults.map((product) => (
               <div key={product._id} className="product-card p-4 shadow-lg">
-                <img src={product.image} alt={product.name} className="w-full" />
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full"
+                />
                 <h3 className="text-xl mt-2">{product.name}</h3>
                 <p className="text-gray-700">{product.price}</p>
               </div>

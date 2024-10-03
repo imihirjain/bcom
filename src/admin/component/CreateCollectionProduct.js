@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateEditCollectionProduct = () => {
-  const [productName, setProductName] = useState('');
-  const [selectedCollection, setSelectedCollection] = useState('');
+  const [productName, setProductName] = useState("");
+  const [selectedCollection, setSelectedCollection] = useState("");
   const [collections, setCollections] = useState([]);
-  const [price, setPrice] = useState('');
-  const [size, setSize] = useState('small');
-  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState("");
+  const [size, setSize] = useState("small");
+  const [description, setDescription] = useState("");
   const [images, setImages] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [products, setProducts] = useState([]);
@@ -24,21 +24,25 @@ const CreateEditCollectionProduct = () => {
 
   const fetchCollections = async () => {
     try {
-      const response = await axios.get('https://bcom-backend.onrender.com/api/collections');
+      const response = await axios.get(
+        "https://bcom-backend.onrender.com/api/collections"
+      );
       setCollections(response.data);
     } catch (error) {
-      console.error('Error fetching collections:', error);
-      toast.error('Failed to fetch collections');
+      console.error("Error fetching collections:", error);
+      toast.error("Failed to fetch collections");
     }
   };
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('https://bcom-backend.onrender.com/api/collection-products/products');
+      const response = await axios.get(
+        "https://bcom-backend.onrender.com/api/collection-products/products"
+      );
       setProducts(response.data);
     } catch (error) {
-      console.error('Error fetching products:', error);
-      toast.error('Failed to fetch products');
+      console.error("Error fetching products:", error);
+      toast.error("Failed to fetch products");
     }
   };
 
@@ -50,19 +54,19 @@ const CreateEditCollectionProduct = () => {
     e.preventDefault();
 
     if (!images.length && !isEditMode) {
-      toast.error('Please upload at least one image');
+      toast.error("Please upload at least one image");
       return;
     }
 
     const formData = new FormData();
-    formData.append('name', productName);
-    formData.append('collection', selectedCollection);
-    formData.append('price', price);
-    formData.append('size', size);
-    formData.append('description', description);
+    formData.append("name", productName);
+    formData.append("collection", selectedCollection);
+    formData.append("price", price);
+    formData.append("size", size);
+    formData.append("description", description);
 
     Array.from(images).forEach((image) => {
-      formData.append('images', image);
+      formData.append("images", image);
     });
 
     try {
@@ -70,36 +74,42 @@ const CreateEditCollectionProduct = () => {
         ? `https://bcom-backend.onrender.com/api/collection-products/${selectedCollection}/products/${productId}`
         : `https://bcom-backend.onrender.com/api/collection-products/${selectedCollection}/products`;
 
-      const method = isEditMode ? 'put' : 'post';
+      const method = isEditMode ? "put" : "post";
 
       const response = await axios({
         method,
         url,
         data: formData,
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
         onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
           setUploadProgress(percentCompleted);
         },
       });
 
-      toast.success(isEditMode ? 'Product updated successfully!' : 'Product created successfully!');
+      toast.success(
+        isEditMode
+          ? "Product updated successfully!"
+          : "Product created successfully!"
+      );
       resetForm();
       fetchProducts(); // Refresh product list
     } catch (error) {
-      toast.error('Failed to save product');
+      toast.error("Failed to save product");
       console.error(error);
     }
   };
 
   const resetForm = () => {
-    setProductName('');
-    setSelectedCollection('');
-    setPrice('');
-    setSize('small');
-    setDescription('');
+    setProductName("");
+    setSelectedCollection("");
+    setPrice("");
+    setSize("small");
+    setDescription("");
     setImages([]);
     setUploadProgress(0);
     setIsEditMode(false);
@@ -117,13 +127,15 @@ const CreateEditCollectionProduct = () => {
   };
 
   const handleDelete = async (collectionId, productId) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
+    if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        await axios.delete(`https://bcom-backend.onrender.com/api/collection-products/${collectionId}/products/${productId}`);
-        toast.success('Product deleted successfully!');
+        await axios.delete(
+          `https://bcom-backend.onrender.com/api/collection-products/${collectionId}/products/${productId}`
+        );
+        toast.success("Product deleted successfully!");
         fetchProducts(); // Refresh product list
       } catch (error) {
-        toast.error('Failed to delete product');
+        toast.error("Failed to delete product");
         console.error(error);
       }
     }
@@ -131,16 +143,23 @@ const CreateEditCollectionProduct = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10">
-      <ToastContainer position="top-center" autoClose={3000} hideProgressBar={true} />
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={true}
+      />
 
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          {isEditMode ? 'Edit Collection Product' : 'Create Collection Product'}
+          {isEditMode ? "Edit Collection Product" : "Create Collection Product"}
         </h2>
 
         {uploadProgress > 0 && (
           <div className="w-full bg-gray-200 rounded-full h-2.5 mb-6">
-            <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${uploadProgress}%` }}>
+            <div
+              className="bg-blue-600 h-2.5 rounded-full"
+              style={{ width: `${uploadProgress}%` }}
+            >
               {uploadProgress}%
             </div>
           </div>
@@ -148,7 +167,9 @@ const CreateEditCollectionProduct = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="block text-gray-700 text-sm font-semibold">Product Name</label>
+            <label className="block text-gray-700 text-sm font-semibold">
+              Product Name
+            </label>
             <input
               type="text"
               value={productName}
@@ -160,7 +181,9 @@ const CreateEditCollectionProduct = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-gray-700 text-sm font-semibold">Collection</label>
+            <label className="block text-gray-700 text-sm font-semibold">
+              Collection
+            </label>
             <select
               value={selectedCollection}
               onChange={(e) => setSelectedCollection(e.target.value)}
@@ -177,7 +200,9 @@ const CreateEditCollectionProduct = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-gray-700 text-sm font-semibold">Size</label>
+            <label className="block text-gray-700 text-sm font-semibold">
+              Size
+            </label>
             <select
               value={size}
               onChange={(e) => setSize(e.target.value)}
@@ -193,7 +218,9 @@ const CreateEditCollectionProduct = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-gray-700 text-sm font-semibold">Price</label>
+            <label className="block text-gray-700 text-sm font-semibold">
+              Price
+            </label>
             <input
               type="number"
               value={price}
@@ -205,7 +232,9 @@ const CreateEditCollectionProduct = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-gray-700 text-sm font-semibold">Description</label>
+            <label className="block text-gray-700 text-sm font-semibold">
+              Description
+            </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -215,7 +244,9 @@ const CreateEditCollectionProduct = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-gray-700 text-sm font-semibold">Upload Images</label>
+            <label className="block text-gray-700 text-sm font-semibold">
+              Upload Images
+            </label>
             <input
               type="file"
               multiple
@@ -229,14 +260,16 @@ const CreateEditCollectionProduct = () => {
             type="submit"
             className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700 transition"
           >
-            {isEditMode ? 'Update Product' : 'Create Product'}
+            {isEditMode ? "Update Product" : "Create Product"}
           </button>
         </form>
       </div>
 
       {/* Product List */}
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-4xl w-full mt-12">
-        <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">Product List</h3>
+        <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">
+          Product List
+        </h3>
         {products.length === 0 ? (
           <p className="text-gray-600 text-center">No products available.</p>
         ) : (
@@ -257,7 +290,9 @@ const CreateEditCollectionProduct = () => {
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(product.collection._id, product._id)}
+                    onClick={() =>
+                      handleDelete(product.collection._id, product._id)
+                    }
                     className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
                   >
                     Delete

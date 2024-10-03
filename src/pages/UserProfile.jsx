@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import UserOrder from "./UserOrder";
 
 const ProfilePage = () => {
   const [profileData, setProfileData] = useState(null);
@@ -18,12 +19,15 @@ const ProfilePage = () => {
       }
 
       try {
-        const response = await axios.get("https://bcom-backend.onrender.com/api/auth/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-    console.log(response)
+        const response = await axios.get(
+          "https://bcom-backend.onrender.com/api/auth/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response);
         setProfileData(response.data);
       } catch (err) {
         setError("Failed to fetch profile data");
@@ -36,7 +40,11 @@ const ProfilePage = () => {
   }, [navigate]);
 
   if (!profileData) {
-    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
   }
 
   return (
@@ -59,18 +67,7 @@ const ProfilePage = () => {
           </div>
           <div>
             <h3 className="text-xl font-semibold mt-4">Your Orders:</h3>
-            {profileData.orders && profileData.orders.length > 0 ? (
-              <ul className="mt-2 space-y-2">
-                {profileData.orders.map((order, index) => (
-                  <li key={index} className="border p-4 rounded shadow">
-                    <p>Order ID: {order._id}</p>
-                    {/* You can include more details about the order if available */}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No orders found.</p>
-            )}
+            <UserOrder />
           </div>
         </div>
       </div>

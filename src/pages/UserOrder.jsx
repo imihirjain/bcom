@@ -10,18 +10,22 @@ const UserOrder = () => {
     const fetchOrder = async () => {
       try {
         const response = await fetch(
-          `https://bcom-backend.onrender.com/api/user/${id}` // Dynamic ID in the API call
+          `https://bcom-backend.onrender.com/api/user/${id}`
         );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
+        console.log("Fetched Order Data:", JSON.stringify(data, null, 2));
         setOrder(data);
-        console.log(data);
         setLoading(false);
       } catch (error) {
-        console.error("Failed to fetch order details:", error);
+        console.error("Failed to fetch order details:", error.message);
         setLoading(false);
       }
     };
-
     if (id) {
       fetchOrder();
     }
@@ -36,7 +40,7 @@ const UserOrder = () => {
   }
 
   return (
-    <div className="container mx-auto p-5 mt-24">
+    <div className="container mx-auto p-5 mt-48">
       <h1 className="text-3xl font-bold mb-6 text-gray-700">Your Orders</h1>
 
       {/* Order Summary */}
@@ -53,9 +57,7 @@ const UserOrder = () => {
             Status:{" "}
             <span
               className={`font-semibold ${
-                order.status === "Completed"
-                  ? "text-green-600"
-                  : "text-red-600"
+                order.status === "Completed" ? "text-green-600" : "text-red-600"
               }`}
             >
               {order.status}
@@ -107,10 +109,16 @@ const UserOrder = () => {
 
         {/* Reorder / Track Buttons */}
         <div className="mt-6 flex justify-between">
-          <Link to="/track-order" className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
+          <Link
+            to="/track-order"
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600"
+          >
             Track Order
           </Link>
-          <Link to="/" className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600">
+          <Link
+            to="/"
+            className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600"
+          >
             Reorder
           </Link>
         </div>
@@ -121,9 +129,7 @@ const UserOrder = () => {
         <h3 className="text-lg font-semibold mb-4 text-gray-600">
           Shipping Details:
         </h3>
-        <p className="text-md text-gray-600">
-          Name: {order.userDetails.name}
-        </p>
+        <p className="text-md text-gray-600">Name: {order.userDetails.name}</p>
         <p className="text-md text-gray-600">
           Phone: {order.userDetails.phone}
         </p>

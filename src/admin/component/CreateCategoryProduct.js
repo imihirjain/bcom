@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateCategoryProduct = () => {
-  const [productName, setProductName] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [productName, setProductName] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [categories, setCategories] = useState([]);
-  const [price, setPrice] = useState('');
-  const [size, setSize] = useState('small');
-  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState("");
+  const [size, setSize] = useState("small");
+  const [description, setDescription] = useState("");
   const [images, setImages] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(0); // To track upload progress
   const [products, setProducts] = useState([]);
@@ -23,21 +23,25 @@ const CreateCategoryProduct = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('https://bcom-backend.onrender.com/api/categories');
+      const response = await axios.get(
+        "https://bcom-backend.onrender.com/api/categories"
+      );
       setCategories(response.data);
     } catch (error) {
-      console.error('Error fetching categories:', error);
-      toast.error('Failed to fetch categories');
+      console.error("Error fetching categories:", error);
+      toast.error("Failed to fetch categories");
     }
   };
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('https://bcom-backend.onrender.com/api/products/products');
+      const response = await axios.get(
+        "https://bcom-backend.onrender.com/api/products/products"
+      );
       setProducts(response.data);
     } catch (error) {
-      console.error('Error fetching products:', error);
-      toast.error('Failed to fetch products');
+      console.error("Error fetching products:", error);
+      toast.error("Failed to fetch products");
     }
   };
 
@@ -47,50 +51,56 @@ const CreateCategoryProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const category = categories.find((cat) => cat.name === selectedCategory);
-  
+
     if (!category) {
-      toast.error('Please select a valid category');
+      toast.error("Please select a valid category");
       return;
     }
-  
+
     const formData = new FormData();
-    formData.append('name', productName);
-    formData.append('category', category._id);
-    formData.append('price', price);
-    formData.append('size', size);
-    formData.append('description', description);
-  
+    formData.append("name", productName);
+    formData.append("category", category._id);
+    formData.append("price", price);
+    formData.append("size", size);
+    formData.append("description", description);
+
     Array.from(images).forEach((image) => {
-      formData.append('images', image);
+      formData.append("images", image);
     });
-  
+
     try {
-      await axios.post(`https://bcom-backend.onrender.com/api/products/${category._id}/products`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          setUploadProgress(percentCompleted);
-        },
-      });
-      toast.success('Product created successfully!');
+      await axios.post(
+        `https://bcom-backend.onrender.com/api/products/${category._id}/products`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadProgress(percentCompleted);
+          },
+        }
+      );
+      toast.success("Product created successfully!");
       fetchProducts();
       resetForm();
     } catch (error) {
-      console.error('Error creating/updating product:', error);
-      toast.error('Failed to create/update product');
+      console.error("Error creating/updating product:", error);
+      toast.error("Failed to create/update product");
     }
   };
 
   const resetForm = () => {
-    setProductName('');
-    setSelectedCategory('');
-    setPrice('');
-    setSize('small');
-    setDescription('');
+    setProductName("");
+    setSelectedCategory("");
+    setPrice("");
+    setSize("small");
+    setDescription("");
     setImages([]);
     setUploadProgress(0); // Reset progress bar after form reset
   };
@@ -106,30 +116,38 @@ const CreateCategoryProduct = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
+    if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        await axios.delete(`https://bcom-backend.onrender.com/api/products/products/${id}`);
-        toast.success('Product deleted successfully!');
+        await axios.delete(
+          `https://bcom-backend.onrender.com/api/products/products/${id}`
+        );
+        toast.success("Product deleted successfully!");
         fetchProducts();
       } catch (error) {
-        console.error('Error deleting product:', error);
-        toast.error('Failed to delete product');
+        console.error("Error deleting product:", error);
+        toast.error("Failed to delete product");
       }
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10">
-      <ToastContainer position="top-center" autoClose={3000} hideProgressBar={true} />
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={true}
+      />
 
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full mb-12">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          {editMode ? 'Update Product' : 'Create Product'}
+          {editMode ? "Update Product" : "Create Product"}
         </h2>
 
         <form onSubmit={handleSubmit} className="mb-8 space-y-6">
           <div className="space-y-2">
-            <label className="block text-gray-700 text-sm font-semibold">Product Name</label>
+            <label className="block text-gray-700 text-sm font-semibold">
+              Product Name
+            </label>
             <input
               type="text"
               value={productName}
@@ -141,7 +159,9 @@ const CreateCategoryProduct = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-gray-700 text-sm font-semibold">Category</label>
+            <label className="block text-gray-700 text-sm font-semibold">
+              Category
+            </label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -158,7 +178,9 @@ const CreateCategoryProduct = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-gray-700 text-sm font-semibold">Price (₹)</label>
+            <label className="block text-gray-700 text-sm font-semibold">
+              Price (₹)
+            </label>
             <input
               type="number"
               value={price}
@@ -170,7 +192,9 @@ const CreateCategoryProduct = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-gray-700 text-sm font-semibold">Size</label>
+            <label className="block text-gray-700 text-sm font-semibold">
+              Size
+            </label>
             <select
               value={size}
               onChange={(e) => setSize(e.target.value)}
@@ -186,7 +210,9 @@ const CreateCategoryProduct = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-gray-700 text-sm font-semibold">Description</label>
+            <label className="block text-gray-700 text-sm font-semibold">
+              Description
+            </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -215,7 +241,7 @@ const CreateCategoryProduct = () => {
             type="submit"
             className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700 transition"
           >
-            {editMode ? 'Update Product' : 'Create Product'}
+            {editMode ? "Update Product" : "Create Product"}
           </button>
         </form>
       </div>

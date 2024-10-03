@@ -158,7 +158,6 @@ const ProductInfo = () => {
     }
 
     localStorage.setItem("cart", JSON.stringify(existingCart));
-    
   };
 
   const handleThumbnailClick = (index) => {

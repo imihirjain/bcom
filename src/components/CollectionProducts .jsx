@@ -4,13 +4,13 @@ import { Link, useParams } from "react-router-dom";
 import Footer from "./Footer";
 
 const CollectionProducts = () => {
-  const { id } = useParams(); 
-  const [products, setProducts] = useState([]); 
-  const [filteredProducts, setFilteredProducts] = useState([]); 
-  const [collectionName, setCollectionName] = useState(""); 
-  const [error, setError] = useState(null); 
-  const [loading, setLoading] = useState(true); 
-  const [sortOption, setSortOption] = useState(""); 
+  const { id } = useParams();
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [collectionName, setCollectionName] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [sortOption, setSortOption] = useState("");
 
   useEffect(() => {
     const fetchCollectionAndProducts = async () => {
@@ -23,7 +23,7 @@ const CollectionProducts = () => {
           throw new Error("Failed to fetch collection details");
         }
         const collectionData = await collectionResponse.json();
-        setCollectionName(collectionData.name); 
+        setCollectionName(collectionData.name);
 
         // Fetch Products for the Collection
         const productsResponse = await fetch(
@@ -33,13 +33,13 @@ const CollectionProducts = () => {
           throw new Error("Failed to fetch products");
         }
         const productsData = await productsResponse.json();
-        setProducts(productsData); 
-        setFilteredProducts(productsData); 
+        setProducts(productsData);
+        setFilteredProducts(productsData);
       } catch (error) {
         setError("Error fetching collection products");
         console.error("Error fetching collection products:", error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -50,21 +50,21 @@ const CollectionProducts = () => {
     let sortedProducts = [...products];
 
     if (option === "atoz") {
-      sortedProducts.sort((a, b) => a.name.localeCompare(b.name)); 
+      sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
     } else if (option === "ztoa") {
-      sortedProducts.sort((a, b) => b.name.localeCompare(a.name)); 
+      sortedProducts.sort((a, b) => b.name.localeCompare(a.name));
     } else if (option === "newtoold") {
       sortedProducts.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       ); // Sort New to Old
     } else if (option === "prizehightolow") {
-      sortedProducts.sort((a, b) => b.price - a.price); 
+      sortedProducts.sort((a, b) => b.price - a.price);
     } else if (option === "prizelowtohigh") {
-      sortedProducts.sort((a, b) => a.price - b.price); 
+      sortedProducts.sort((a, b) => a.price - b.price);
     }
 
-    setFilteredProducts(sortedProducts); 
-    setSortOption(option); 
+    setFilteredProducts(sortedProducts);
+    setSortOption(option);
   };
 
   return (
