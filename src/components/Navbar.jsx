@@ -12,6 +12,7 @@ import Slider from "./Slider";
 import logo from "../assets/HS&DV/DVW.png";
 import hoverLogo from "../assets/DV.PNG";
 import VideoHome from "./VideoHome";
+import { HiOutlineUserCircle } from "react-icons/hi2";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -135,10 +136,11 @@ const Navbar = () => {
 
         {/* Navbar */}
         <div
-          className={`${isScrolled || location.pathname !== "/"
-            ? "bg-white shadow-md text-black"
-            : "bg-transparent text-white"
-            } fixed top-0 left-0 w-full z-50 transition-colors duration-200 hover:bg-white hover:text-black`}
+          className={`${
+            isScrolled || location.pathname !== "/"
+              ? "bg-white shadow-md text-black"
+              : "bg-transparent text-white"
+          } fixed top-0 left-0 w-full z-50 transition-colors duration-200 hover:bg-white hover:text-black`}
           onMouseEnter={handleMouseEnter} // Handle mouse enter
           onMouseLeave={handleMouseLeave} // Handle mouse leave
         >
@@ -149,27 +151,86 @@ const Navbar = () => {
               <div className="absolute left-5 top-5 md:hidden">
                 <FontAwesomeIcon
                   icon={faBars}
-                  className={`text-2xl mt-1 cursor-pointer ${showMenu || location.pathname !== "/"
-                    ? "text-black"
-                    : isHovered
+                  className={`text-2xl mt-1 cursor-pointer ${
+                    showMenu || location.pathname !== "/"
+                      ? "text-black"
+                      : isHovered
                       ? "text-black"
                       : isScrolled
-                        ? "text-black"
-                        : "text-white"
-                    }`}
+                      ? "text-black"
+                      : "text-white"
+                  }`}
                   onClick={toggleMenu}
                   onMouseEnter={() => setIsHovered(true)} // Set hover state to true on mouse enter
                   onMouseLeave={() => setIsHovered(false)} // Set hover state to false on mouse leave
                 />
               </div>
 
+              <div className="flex justify-around items-center text-center uppercase">
+                <div className="flex">
+                  <a
+                    href="#search"
+                    onClick={handleSearchClick}
+                    className="hover:border-b-2 font-indif hover:border-black cursor-pointer"
+                  >
+                    <span className="hidden uppercase ">Search</span>
+                  </a>
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    className="mt-1 cursor-pointer text-xl "
+                    onClick={handleSearchClick}
+                  />
+                </div>
+
+                <Link to={"/"}>
+                  {/* <img
+                      src={
+                        location.pathname === "/"
+                          ? isScrolled || isHovered
+                            ? hoverLogo
+                            : logo
+                          : hoverLogo
+                      }
+                      alt="Logo"
+                      className="h-16 w-32 lg:ml-40 transition-opacity duration-300"
+                    /> */}
+                  <p className="mt-6 h-12 text-4xl font-light font-corm uppercase">
+                    Dev and Viv
+                  </p>
+                </Link>
+                <div className="flex ">
+                  <Link
+                    to="/cart"
+                    className="hover:border-b-2 relative hover:border-black font-indif"
+                  >
+                    <span className="hidden uppercase mt-2">Bag</span>
+                    {cartCount > 0 && (
+                      <span className="mb-2 ml-5 bottom-3 bg-red-500 absolute rounded-full px-2 text-md text-white">
+                        {cartCount}
+                      </span>
+                    )}
+                  </Link>
+                  <Link to="/cart">
+                    <FontAwesomeIcon
+                      icon={faBagShopping}
+                      className="ml-2 text-xl mt-2 cursor-pointer"
+                    />
+                  </Link>
+                  <Link to="/login">
+                    <HiOutlineUserCircle className="ml-10 mt-1 text-3xl cursor-pointer " />
+                  </Link>
+                </div>
+              </div>
+
               {/* Navbar content (links and logo) */}
               <div
-                className={`h-[80px] flex justify-between items-center px-10 ${showMenu ? "hidden" : "" // Hide navbar content when menu is open
-                  }`}
+                className={`flex justify-center items-center px-10 ${
+                  showMenu ? "hidden" : "" // Hide navbar content when menu is open
+                }`}
               >
                 {/* Links for desktop */}
-                <ul className="md:flex gap-10 items-center hidden">
+
+                <ul className="md:flex text-lg mt-2 gap-10 items-center  hidden uppercase">
                   <li>
                     <Link
                       to="/"
@@ -265,76 +326,12 @@ const Navbar = () => {
                       Heetesh Shah
                     </Link>
                   </li>
-                </ul>
 
-                <div className="flex-grow text-center">
-                  <Link to={"/"}>
-                    <img
-                      src={
-                        location.pathname === "/"
-                          ? isScrolled || isHovered
-                            ? hoverLogo
-                            : logo
-                          : hoverLogo
-                      }
-                      alt="Logo"
-                      className="h-[200px] w-[200px] lg:ml-32 transition-opacity duration-300"
-                    />
-                  </Link>
-
-                </div>
-
-                <ul className="flex gap-10 items-center">
-                  <li>
-                    <div className="flex items-center">
-                      <a
-                        href="#search"
-                        onClick={handleSearchClick}
-                        className="hover:border-b-2 font-indif hover:border-black cursor-pointer"
-                      >
-                        <span className="hidden uppercase lg:block">
-                          Search
-                        </span>
-                      </a>
-                      <FontAwesomeIcon
-                        icon={faSearch}
-                        className="ml-2 cursor-pointer text-xl "
-                        onClick={handleSearchClick}
-                      />
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex ">
-                      <Link
-                        to="/cart"
-                        className="hover:border-b-2 relative hover:border-black font-indif"
-                      >
-                        <span className="hidden uppercase lg:block mt-2">Bag</span>
-                        {cartCount > 0 && (
-                          <span className="lg:ml-14 ml-5 bottom-3 bg-red-500 absolute rounded-full px-2 text-md text-white">
-                            {cartCount}
-                          </span>
-                        )}
-                      </Link>
-                      <Link to="/cart">
-                        <FontAwesomeIcon
-                          icon={faBagShopping}
-                          className="ml-2 text-xl mt-2 cursor-pointer"
-                        />
-                      </Link>
-                      <Link to="/login">
-                        <button className="bg-blue-500 ml-4 text-white px-2 font-bold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300 transition ease-in-out duration-300">
-                          Login
-                        </button>
-                      </Link>
-                    </div>
-                  </li>
+                  <li></li>
                 </ul>
               </div>
-
             </>
           )}
-
 
           {/* Search Bar */}
           {showSearchBar && (
@@ -359,7 +356,6 @@ const Navbar = () => {
               />
             </div>
           )}
-
         </div>
 
         {/* Mobile Menu */}

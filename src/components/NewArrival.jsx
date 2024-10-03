@@ -45,8 +45,31 @@ const NewArrival = () => {
     );
   };
 
+  // Touch event handlers
+  let startX = 0;
+  const threshold = 50; // Minimum swipe distance in pixels to change slides
+
+  const handleTouchStart = (e) => {
+    startX = e.touches[0].clientX; // Store the initial touch position
+  };
+
+  const handleTouchMove = (e) => {
+    const moveX = e.touches[0].clientX - startX; // Calculate the movement
+    if (moveX > threshold) {
+      prevSlide(); // Move to previous slide if swiped right
+      startX = e.touches[0].clientX; // Update startX for next movement
+    } else if (moveX < -threshold) {
+      nextSlide(); // Move to next slide if swiped left
+      startX = e.touches[0].clientX; // Update startX for next movement
+    }
+  };
+
   return (
-    <div className="w-full flex flex-col items-center justify-center py-10 sm:py-2 font-indif">
+    <div
+      className="w-full flex flex-col items-center justify-center py-10 sm:py-2 font-indif"
+      onTouchStart={handleTouchStart} // Attach touch start handler
+      onTouchMove={handleTouchMove} // Attach touch move handler
+    >
       {/* Text Section */}
       <div className="text-center mb-6 px-4">
         <h2 className="text-[20px] md:text-[25px] mt-[40px] mb-2 font-semibold uppercase">
