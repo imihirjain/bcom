@@ -10,7 +10,7 @@ const UserOrder = () => {
     const fetchOrder = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/user/${id}` // Dynamic ID in the API call
+          `https://bcom-backend.onrender.com/api/user/${id}` // Dynamic ID in the API call
         );
         const data = await response.json();
         setOrder(data);
