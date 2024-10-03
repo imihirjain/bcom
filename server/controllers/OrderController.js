@@ -3,14 +3,15 @@ const Payment = require('../models/Payment');
 const { sendOrderConfirmationEmail } = require('../config/mailer');
 
 // Create a new order
+// Create a new order
 exports.createOrder = async (req, res) => {
   try {
-    const { cartItems, totalPrice, paymentData, userDetails } = req.body;
+    const { cartItems, totalPrice, paymentData, userDetails, userId } = req.body;
 
     // Ensure the user is authenticated
-    const userId = req.user ? req.user._id : null;
+    const authenticatedUserId = req.user ? req.user._id : userId;
 
-    if (!userId) {
+    if (!authenticatedUserId) {
       return res.status(400).json({ message: 'User ID is missing. Please make sure you are logged in.' });
     }
 
@@ -25,12 +26,16 @@ exports.createOrder = async (req, res) => {
       totalPrice,
       paymentData,
       userDetails,
-      userId,  // Include userId here
+      userId: authenticatedUserId,  // Ensure the userId is properly assigned here
       status: 'Completed',
     });
 
     // Save the order in the database
     const savedOrder = await newOrder.save();
+
+    // Log order details to the console
+    console.log('Order created successfully:');
+    console.log(savedOrder);
 
     // Send order confirmation email
     await sendOrderConfirmationEmail(userDetails.email, savedOrder);
@@ -49,6 +54,58 @@ exports.createOrder = async (req, res) => {
     });
   }
 };
+exports.createOrder = async (req, res) => {
+  try {
+    const { cartItems, totalPrice, paymentData, userDetails, userId } = req.body;
+
+    // Ensure the user is authenticated
+    const authenticatedUserId = req.user ? req.user._id : userId;
+
+    if (!authenticatedUserId) {
+      return res.status(400).json({ message: 'User ID is missing. Please make sure you are logged in.' });
+    }
+
+    // Check for missing user details
+    if (!userDetails || !userDetails.name || !userDetails.phone || !userDetails.email || !userDetails.address) {
+      return res.status(400).json({ message: 'User details are missing or incomplete.' });
+    }
+
+    // Create a new order instance
+    const newOrder = new Order({
+      cartItems,
+      totalPrice,
+      paymentData,
+      userDetails,
+      userId: authenticatedUserId,  // Ensure the userId is properly assigned here
+      status: 'Completed',
+    });
+
+    // Save the order in the database
+    const savedOrder = await newOrder.save();
+
+    // Log order details to the console
+    console.log('Order created successfully:');
+    console.log(savedOrder);
+
+    // Send order confirmation email
+    await sendOrderConfirmationEmail(userDetails.email, savedOrder);
+
+    // Return the response with the saved order
+    return res.status(201).json({
+      message: 'Order created successfully',
+      order: savedOrder,
+    });
+
+  } catch (error) {
+    console.error("Error creating order:", error.message);
+    return res.status(500).json({
+      message: 'Error creating order',
+      error: error.message,
+    });
+  }
+};
+
+
 
 // Update order status based on payment
 exports.updateOrderStatus = async (req, res) => {

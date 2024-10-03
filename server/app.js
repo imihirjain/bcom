@@ -40,7 +40,7 @@ app.use('/api', videoRoutes);
 app.use('/api', orderRoutes);
 // app.use('/api/media', mediaRoutes);
 app.use('/api/media', mediaRoutes);
-app.use('/api/auth',authRoutes);
+app.use('/api/auth/',authRoutes);
 
 // Serve static files from the front-end build folder if you have a front-end
 app.use(express.static(path.join(__dirname, 'build')));
