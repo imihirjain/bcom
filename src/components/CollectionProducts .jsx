@@ -104,7 +104,7 @@ const CollectionProducts = () => {
           {filteredProducts.map((product) => (
             <div
               key={product._id}
-              className="relative group shadow-md ml-7 p-4 bg-white rounded-sm w-80 h-100"
+              className="relative group ml-7 p-4 rounded-sm w-72 h-100"
             >
               {/* Product Image */}
               <div className="relative w-72 overflow-hidden rounded-sm">

@@ -185,7 +185,7 @@ const ProductInfo = () => {
   return (
     <>
       <ToastContainer position="top-center" />
-      <div className="container mx-auto p-5 mt-24 overflow-x-hidden font-indif">
+      <div className="container mx-auto p-5 mt-36 overflow-x-hidden font-indif">
         <div className="flex flex-col md:flex-row gap-10">
           <div className="w-full md:w-1/2 relative md:ml-[100px]">
             <img
@@ -210,7 +210,7 @@ const ProductInfo = () => {
                     key={index}
                     src={image}
                     alt={`Product Thumbnail ${index + 1}`}
-                    className={`w-20 h-20 rounded-lg cursor-pointer border-2 ${
+                    className={`w-20 h-20 cursor-pointer border-2 ${
                       currentImageIndex === index
                         ? "border-blue-500"
                         : "border-transparent"
