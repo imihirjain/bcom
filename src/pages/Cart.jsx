@@ -181,8 +181,8 @@ const Cart = () => {
                   // Clear cart and redirect to orders page
                   setCart([]);
                   localStorage.removeItem("cart");
-  
-                  navigate(`/`);
+                  navigate(/user/${userId});
+                  // navigate(`/`);
                 } else {
                   toast.error("Order creation failed. Please try again.");
                 }
