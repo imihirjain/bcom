@@ -194,7 +194,7 @@ const Navbar = () => {
                       alt="Logo"
                       className="h-16 w-32 lg:ml-40 transition-opacity duration-300"
                     /> */}
-                  <p className="mt-6 h-12 text-4xl font-light font-corm uppercase">
+                  <p className="mt-6 h-12 text-2xl lg:text-4xl font-light font-corm uppercase">
                     Dev and Viv
                   </p>
                 </Link>
