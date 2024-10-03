@@ -32,7 +32,7 @@ import Size from "./pages/Size";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import UserOrder from "./pages/UserOrder";
-import UserOrders from "./pages/UserOrder";
+import UserProfile from "./pages/UserProfile"
 
 import whatsappLogo from "./assets/what.png"
 
@@ -57,6 +57,7 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path = "/signup" element={<Signup/>} />
+        <Route path="/user" element={<UserProfile />} />
         <Route path="orders" element={<AllOrders />} />
         {/* Shop Page Route */}
         <Route path="/shop" element={<ShopPage />} />
