@@ -130,9 +130,9 @@ const CollectionProducts = () => {
                 </Link>
 
                 {/* Ready to Ship */}
-                <span className="absolute top-2 font-gara right-2 bg-white text-red-500 px-3 py-1 rounded">
+                {/* <span className="absolute top-2 font-gara right-2 bg-white text-red-500 px-3 py-1 rounded">
                   Ready To Ship
-                </span>
+                </span> */}
               </div>
 
               {/* Product Info */}
