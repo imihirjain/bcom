@@ -83,19 +83,17 @@ const Cart = () => {
   // Checkout handler function
   const handleCheckout = async () => {
     const token = localStorage.getItem("token");
-    // const token = localStorage.getItem("token");
-    const userId = localStorage.getItem('userId');
-    console.log(userId);
-
+    const userId = localStorage.getItem('userId'); // Ensure userId is fetched here
+  
     if (!token) {
       // Redirect to login page with redirect query to cart
       return navigate("/login?redirect=/cart");
     }
-
+  
     if (!userDetails.name || !userDetails.phone || !userDetails.email || !userDetails.address) {
       return toast.error("Please fill out all user details.");
     }
-
+  
     const currentCart = cart.map((item) => ({
       productId: item.id,
       name: item.name,
@@ -106,7 +104,7 @@ const Cart = () => {
       size: item.size,
       collection: item.collection,
     }));
-
+  
     try {
       // Create order for payment on the backend
       const paymentResponse = await fetch(
@@ -125,9 +123,9 @@ const Cart = () => {
           }),
         }
       );
-
+  
       const order = await paymentResponse.json();
-
+  
       if (order && order.id) {
         // Set up Razorpay options for payment
         const options = {
@@ -141,7 +139,7 @@ const Cart = () => {
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
             };
-
+  
             try {
               const verifyResponse = await fetch(
                 "https://bcom-backend.onrender.com/api/payments/verify",
@@ -154,9 +152,9 @@ const Cart = () => {
                   body: JSON.stringify(paymentData),
                 }
               );
-
+  
               const verifyResult = await verifyResponse.json();
-
+  
               if (verifyResponse.ok) {
                 const orderResponse = await fetch(
                   "https://bcom-backend.onrender.com/api/orders",
@@ -171,20 +169,19 @@ const Cart = () => {
                       totalPrice,
                       paymentData,
                       userDetails,
-                      userId: userId, 
+                      userId,  // Ensure userId is passed here
                     }),
                   }
                 );
-
+  
                 const orderResult = await orderResponse.json();
                 console.log(orderResult);
-
+  
                 if (orderResponse.ok) {
                   // Clear cart and redirect to orders page
                   setCart([]);
                   localStorage.removeItem("cart");
-                  
-                  // navigate(`/user/${userId}`);
+  
                   navigate(`/`);
                 } else {
                   toast.error("Order creation failed. Please try again.");
@@ -208,7 +205,7 @@ const Cart = () => {
             color: "#F37254",
           },
         };
-
+  
         const rzp = new window.Razorpay(options);
         rzp.open();
       } else {
@@ -219,6 +216,7 @@ const Cart = () => {
       toast.error("Something went wrong during checkout. Please try again.");
     }
   };
+  
 
   // Render empty cart message if no items
   if (cart.length === 0) {
